@@ -198,9 +198,31 @@ class MostrarProducto
             $stmt->bindParam(":plataforma", $plataforma, PDO::PARAM_STR);
             $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } else {
+            echo "error";
         }
-        else {
-            echo "error penesotepopop";
+    }
+    public function productosOfertas($tipoProducto)
+    {
+        if (!empty($tipoProducto === 'Videojuego')) {
+            $sql = "
+             SELECT 
+             idProducto,
+             descuentoProducto,
+             totalProducto,
+             precioProducto,
+             nombreProducto,
+             ventaProducto
+             FROM producto p
+             WHERE idTipoProducto = 'videojuego'
+             AND p.stock > 0
+             ORDER BY descuentoProducto DESC
+		     LIMIT 3 
+            ";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);            
         }
     }
 }

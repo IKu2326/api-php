@@ -38,6 +38,15 @@
             echo json_encode($producto);
         }
 
+        public static function productosOfertas(){
+            $producto = new MostrarProducto();
+
+            $tipoProducto = trim($_GET['tipoProducto'] ?? null);
+
+            $producto = $producto->productosOfertas($tipoProducto);
+            echo json_encode($producto);
+        }
+
 
     }
 

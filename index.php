@@ -27,6 +27,9 @@ switch ($ruta) {
     case 'obtenerProductosExclusivos':
         ControladorMostrarProducto::productosExclusivos();
         break;
+    case 'obtenerProductosOfertas':
+        ControladorMostrarProducto::productosOfertas();
+        break;
     case 'obtenerDetallesProducto':
         ControladorMostrarDetallesProducto::mostrarDetallesProducto();
         break;
