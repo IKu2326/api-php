@@ -1,11 +1,19 @@
 <?php
 require_once './models/usuario.php';
+require_once './vendor/autoload.php';
 
-class ControladorUsuario {
-    public static function registrar() {
+use Firebase\JWT\JWT;
+
+
+
+class ControladorUsuario
+{
+    public static function registrar()
+    {
         $datos = json_decode(file_get_contents("php://input"), true);
+        var_dump($datos);
 
-        if(!isset($datos['nombre'], $datos['segundoNombre'], $datos['apellido'], $datos['segundoApellido'], $datos['correo'], $datos['celular'], $datos['contrasena'])) {
+        if (!isset($datos['nombre'], $datos['segundoNombre'], $datos['apellido'], $datos['segundoApellido'], $datos['correo'], $datos['celular'], $datos['contrasena'])) {
             http_response_code(400);
             echo json_encode(["mensaje" => "Faltan datos requeridos."]);
             return;
@@ -24,19 +32,21 @@ class ControladorUsuario {
         );
 
         if ($registro === "correo_duplicado") {
-            http_response_code(409); 
+            http_response_code(409);
             echo json_encode(["mensaje" => "El correo ya está registrado."]);
         } elseif ($registro === true) {
             echo json_encode(["mensaje" => "Usuario registrado exitosamente."]);
         } else {
-            http_response_code(500); 
+            http_response_code(500);
             echo json_encode(["mensaje" => "Error al registrar el usuario."]);
         }
     }
 
-    public static function login() {
+    public static function login()
+    {
         $datos = json_decode(file_get_contents("php://input"), true);
-    
+        var_dump($datos);
+
         if (!isset($datos['correo'], $datos['contrasena'])) {
             http_response_code(400);
             echo json_encode(["mensaje" => "Faltan datos requeridos."]);
@@ -44,12 +54,23 @@ class ControladorUsuario {
         }
 
         $usuario = new Usuario();
-    
+
         $resultado = $usuario->login($datos['correo'], $datos['contrasena']);
-    
+
         if ($resultado) {
+            $key = "TU_CLAVE_SECRETA"; // Usa una clave segura
+
+            $payload = [
+                "correo" => $resultado['correo'],
+                "nombre" => $resultado['nombre'],
+                "exp" => time() + 3600 // Token válido por 1 hora
+            ];
+
+            $jwt = JWT::encode($payload, $key, 'HS256');
+
             echo json_encode([
                 "mensaje" => "Inicio de sesión exitoso.",
+                "token" => $jwt,
                 "usuario" => $resultado
             ]);
         } else {
@@ -58,5 +79,3 @@ class ControladorUsuario {
         }
     }
 }
-
-?>

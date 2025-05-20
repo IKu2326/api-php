@@ -11,19 +11,17 @@ class MostrarProducto
         $this->conn = Database::conectar();
     }
 
-    public function productosMasVendidos($plataforma, $tipoProducto, $genero)
+    public function productosMasVendidos($plataforma, $tipoProducto, $genero, $generosJuegos)
     {
         if ($tipoProducto === 'Videojuego') {
             if (!empty($plataforma) && !empty($genero)) {
-
-
-                $placeholder = implode(',', array_fill(0, count($plataforma), '?'));
-
                 $sql = "
              SELECT 
              p.idProducto,
              p.precioProducto,
              p.nombreProducto,
+             p.descuentoProducto,
+             p.totalProducto,
              pl.idPlataforma AS plataforma,
              ge.idGeneroJuego AS generojuego
              FROM producto p
@@ -32,17 +30,16 @@ class MostrarProducto
              JOIN plataforma pl ON ap.idPlataforma = pl.idPlataforma
              JOIN aux_genero ag ON j.idJuego = ag.fk_pk_juego
              JOIN generojuego ge ON ag.fk_pk_genero = ge.idGeneroJuego
-             WHERE pl.idPlataforma IN ($placeholder)
-             AND ge.idGeneroJuego = ?
+             WHERE pl.idPlataforma = :plataforma
+             AND ge.idGeneroJuego = :genero
              AND p.stock > 0
              ORDER BY precioProducto ASC
-		     LIMIT 3 
+		     LIMIT 12
              ";
-
                 $stmt = $this->conn->prepare($sql);
-
-                $params = array_merge($plataforma, [$genero]);
-                $stmt->execute($params);
+                $stmt->bindParam(":plataforma", $plataforma, PDO::PARAM_STR);
+                $stmt->bindParam(":genero", $genero, PDO::PARAM_STR);
+                $stmt->execute();
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             } elseif (!empty($plataforma)) {
 
@@ -50,7 +47,9 @@ class MostrarProducto
             SELECT 
             p.idProducto, 
             p.precioProducto, 
+            p.totalProducto,
             p.nombreProducto, 
+            p.descuentoProducto,
             pl.idPlataforma AS plataforma 
             FROM producto p 
             JOIN aux_plataforma ap ON p.idProducto = ap.idJuego 
@@ -67,10 +66,12 @@ class MostrarProducto
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             } elseif (!empty($genero)) {
                 $sql = "
-            SELECT 
+              SELECT 
              p.idProducto,
              p.precioProducto,
+             p.totalProducto,
              p.nombreProducto,
+             p.descuentoProducto,
              ge.idGeneroJuego AS generojuego
              FROM producto p
              JOIN juego j ON p.idProducto = j.idJuego
@@ -78,12 +79,23 @@ class MostrarProducto
              JOIN generojuego ge ON ag.fk_pk_genero = ge.idGeneroJuego
              WHERE ge.idGeneroJuego = :genero
              AND p.stock > 0
-             ORDER BY precioProducto ASC
-		     LIMIT 3
+             ORDER BY p.ventaProducto DESC
+		     LIMIT 12
                 ";
 
                 $stmt = $this->conn->prepare($sql);
                 $stmt->bindParam(":genero", $genero, PDO::PARAM_STR);
+                $stmt->execute();
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            } elseif (!empty($generosJuegos)) {
+                $sql = "
+                    SELECT idGeneroJuego  
+                    FROM generojuego 
+                    WHERE estadoGeneroJuego = 1 
+                    Limit 8
+                ";
+
+                $stmt = $this->conn->prepare($sql);
                 $stmt->execute();
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             } else {
@@ -91,7 +103,9 @@ class MostrarProducto
              SELECT 
              idProducto,
              precioProducto,
+             p.totalProducto,
              nombreProducto,
+             p.descuentoProducto,
              ventaProducto
              FROM producto p
              WHERE idTipoProducto = 'videojuego'
@@ -104,22 +118,38 @@ class MostrarProducto
                 $stmt->execute();
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
-        } else {
-            echo "error penesote$tipoProducto";
+        } elseif ($tipoProducto === 'Consola') {
+            $sql = "
+                SELECT 
+                idProducto,
+                precioProducto,
+                totalProducto,
+                nombreProducto,
+                p.descuentoProducto,
+                ventaProducto
+                FROM producto p
+                WHERE idTipoProducto = 'Consola'
+                AND p.stock > 0
+                ORDER BY ventaProducto DESC
+                LIMIT 3
+                ";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     }
 
     public function productosTendencias($plataforma, $tipoProducto, $genero)
     {
         if ($tipoProducto === 'Videojuego') {
-            if (!empty($plataforma) && !empty($genero)) {
-                echo "aqui";
-            } elseif (!empty($plataforma)) {
+            if (!empty($plataforma)) {
                 $sql = "
                 SELECT 
                  p.idProducto, 
                  p.precioProducto, 
+                 totalProducto,
                  p.nombreProducto, 
+                 p.descuentoProducto,
                  pl.idPlataforma AS plataforma,
                  cl.totalCalificacion,
                  cl.PromedioAceptacion,
@@ -142,13 +172,14 @@ class MostrarProducto
                 $stmt->bindParam(":plataforma", $plataforma, PDO::PARAM_STR);
                 $stmt->execute();
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            } elseif (!empty($genero)) {
             } else {
                 $sql = "
                 SELECT 
                  p.idProducto, 
                  p.precioProducto, 
+                 p.totalProducto,
                  p.nombreProducto, 
+                 p.descuentoProducto,
                  cl.totalCalificacion,
                  cl.PromedioAceptacion,
                  (cl.totalCalificacion + cl.PromedioAceptacion) AS calificacionAbsoluta
@@ -167,8 +198,31 @@ class MostrarProducto
                 $stmt->execute();
                 return $stmt->fetchAll(PDO::FETCH_ASSOC);
             }
-        } else {
-            echo "algo paso";
+        } elseif ($tipoProducto === 'Consola') {
+            $sql = "
+                 SELECT 
+                 p.idProducto, 
+                 p.precioProducto, 
+                 p.totalProducto,
+                 p.nombreProducto, 
+                 p.descuentoProducto,
+                 cl.totalCalificacion,
+                 cl.PromedioAceptacion,
+                 (cl.totalCalificacion + cl.PromedioAceptacion) AS calificacionAbsoluta
+
+                 FROM producto p 
+                 JOIN calificacionfinal cl ON p.idProducto = cl.idProducto
+
+                 WHERE p.idTipoProducto = 'Consola'
+                 AND p.stock > 0 
+
+                 ORDER BY calificacionAbsoluta DESC
+                 LIMIT 9;
+            ";
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     }
 
@@ -179,7 +233,9 @@ class MostrarProducto
             SELECT
 			p.idProducto, 
             p.precioProducto, 
+            p.totalProducto,
             p.nombreProducto, 
+            p.descuentoProducto,
             pl.idPlataforma AS plataforma 
             FROM producto p 
             JOIN aux_plataforma ap ON p.idProducto = ap.idJuego 
@@ -212,6 +268,7 @@ class MostrarProducto
              totalProducto,
              precioProducto,
              nombreProducto,
+             p.descuentoProducto,
              ventaProducto
              FROM producto p
              WHERE idTipoProducto = 'videojuego'
@@ -220,9 +277,28 @@ class MostrarProducto
 		     LIMIT 3 
             ";
 
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);            
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } elseif (!empty($tipoProducto === 'Consola')) {
+            $sql = "
+             SELECT 
+             idProducto,
+             descuentoProducto,
+             totalProducto,
+             precioProducto,
+             nombreProducto,
+             p.descuentoProducto,
+             ventaProducto
+             FROM producto p
+             WHERE idTipoProducto = 'Consola'
+             AND p.stock > 0
+             ORDER BY descuentoProducto DESC
+             LIMIT 3
+            ";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
     }
 }
