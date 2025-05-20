@@ -10,8 +10,9 @@
             $plataforma = $_GET['plataforma'] ?? null;
             $genero = $_GET['genero'] ?? null;
             $tipoProducto = trim($_GET['tipoProducto'] ?? null);
+            $generosJuegos = $_GET['generosJuegos'] ?? null;
 
-            $producto = $producto->productosMasVendidos($plataforma, $tipoProducto, $genero,);
+            $producto = $producto->productosMasVendidos($plataforma, $tipoProducto, $genero, $generosJuegos);
 
             echo json_encode($producto);
         }
