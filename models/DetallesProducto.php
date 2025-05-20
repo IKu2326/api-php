@@ -16,17 +16,30 @@ class DetallesProducto{
         if(!empty($id))
         {
             $sql= "
-                 SELECT 
+
+             SELECT 
              p.idProducto,
              p.precioProducto,
              p.nombreProducto,
              p.descuentoProducto,
              p.totalProducto,
              j.anoLanzamineto,
-             j.descripcionJuego
+             j.descripcionJuego,
+             GROUP_CONCAT(DISTINCT aug.fk_pk_genero SEPARATOR ', ') AS aux_genero,
+             GROUP_CONCAT(DISTINCT apl.idPlataforma SEPARATOR ', ') AS aux_plataforma
              FROM producto p
              JOIN juego j ON p.idProducto = j.idJuego
+             JOIN aux_genero aug ON p.idProducto = aug.fk_pk_juego
+             JOIN aux_plataforma apl ON p.idProducto = apl.idJuego
              WHERE p.idProducto = :id
+             GROUP BY 
+             p.idProducto,
+             p.precioProducto,
+             p.nombreProducto,
+             p.descuentoProducto,
+             p.totalProducto,
+             j.anoLanzamineto,
+             j.descripcionJuego;
  
             ";
 
