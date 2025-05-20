@@ -8,6 +8,8 @@
             $producto = new MostrarProducto();
 
             $plataforma = $_GET['plataforma'] ?? null;
+            
+
             $genero = $_GET['genero'] ?? null;
             $tipoProducto = trim($_GET['tipoProducto'] ?? null);
 
