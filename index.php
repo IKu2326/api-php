@@ -6,11 +6,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 require_once './controllers/controladorUsuario.php';
 require_once './controllers/controladorMostrarProducto.php';
 require_once './controllers/controladorDetallesProducto.php';
+//admin
 require_once './controllers/admin/controladorFormaPago.php';
 require_once './controllers/admin/controladorCalificacionCliente.php';
 require_once './controllers/admin/controladorCliente.php';
 require_once './controllers/admin/controladorProducto.php';
 require_once './controllers/admin/controladorFactura.php';
+require_once './controllers/admin/controladorUsuarioAdmin.php';
 
 $ruta = trim($_GET['ruta'] ?? '');
 
@@ -110,6 +112,21 @@ switch ($ruta) {
         break;
     case 'Eliminar_Factura':
         controladorFactura::eliminar();
+        break;
+    case 'Consultar_UsuarioAdmin':
+        ControladorUsuarioAdmin::consultar();
+        break;
+    case 'ConsultarPorID_UsuarioAdmin':
+        ControladorUsuarioAdmin::consultar_Id();
+        break;
+    case 'Crear_UsuarioAdmin':
+        ControladorUsuarioAdmin::crear();
+        break;
+    case 'Editar_UsuarioAdmin':
+        controladorUsuarioAdmin::editar();
+        break;
+    case 'Eliminar_UsuarioAdmin':
+        controladorUsuarioAdmin::eliminar();
         break;
     default:
         echo json_encode(["mensaje" => "Ruta no encontrada.", "ruta_solicitada" => $ruta]);

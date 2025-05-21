@@ -34,7 +34,8 @@ class controladorProducto {
     public static function crear() {
         $datos = json_decode(file_get_contents("php://input"), true);
 
-        if(!isset($datos['idProducto'], $datos['direccion'], $datos['complemento'])) {
+        if(!isset($datos['idProducto'], $datos['nombreProducto'], $datos['precioProducto']
+        , $datos['garantiaProducto'], $datos['idTipoProducto'], $datos['id'], $datos['stock'], $datos['cantidad'])) {
             http_response_code(400);
             echo json_encode(["mensaje" => "Faltan datos requeridos."]);
             return;
@@ -42,8 +43,13 @@ class controladorProducto {
 
         $registro = Producto::Crear(
             $datos['idProducto'],
-            $datos['direccion'],
-            $datos['complemento']
+            $datos['nombreProducto'],
+            $datos['precioProducto'],
+            $datos['garantiaProducto'],
+            $datos['idTipoProducto'],
+            $datos['idAdministrador'],
+            $datos['stock'],
+            $datos['cantidad'],
         );
 
 
@@ -61,7 +67,9 @@ class controladorProducto {
     public static function editar() {
         $datos = json_decode(file_get_contents("php://input"), true);
 
-        if(!isset($datos['idProducto'], $datos['direccion'], $datos['complemento'])) {
+        if(!isset($datos['idProducto'], $datos['nombreProducto'], $datos['precioProducto']
+        , $datos['garantiaProducto'], $datos['idTipoProducto'], $datos['idAdministrador'], $datos['stock'],
+        $datos['cantidad'])) {
             http_response_code(400);
             echo json_encode(["mensaje" => "Faltan datos requeridos."]);
             return;
@@ -69,8 +77,13 @@ class controladorProducto {
 
         $registro = Producto::Editar(
             $datos['idProducto'],
-            $datos['direccion'],
-            $datos['complemento']
+            $datos['nombreProducto'],
+            $datos['precioProducto'],
+            $datos['garantiaProducto'],
+            $datos['idTipoProducto'],
+            $datos['idAdministrador'],
+            $datos['stock'],
+            $datos['cantidad'],
         );
 
         if ($registro === true) {
@@ -93,8 +106,8 @@ class controladorProducto {
         $id2 = $datos['id2'] ?? null;
         $nombre2 = $datos['nombre2'] ?? null;
 
-        $FormaPago = new Producto();
-        $resultado = $FormaPago->eliminar($datos['id1'], $id2,$datos['nombre1'], $nombre2);
+        $Producto = new Producto();
+        $resultado = $Producto->eliminar($datos['id1'], $id2,$datos['nombre1'], $nombre2);
 
         if ($resultado) {
             echo json_encode(["mensaje" => " eliminado"]);
