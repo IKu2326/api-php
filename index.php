@@ -31,6 +31,9 @@ switch ($ruta) {
     case 'obtenerDetallesProducto':
         ControladorMostrarDetallesProducto::mostrarDetallesProducto();
         break;
+     case 'obtenerDetallesConsola':
+        ControladorMostrarDetallesProducto::mostrarDetalleConsola();
+        break;
     default:
         echo json_encode(["mensaje" => "Ruta no encontrada.", "ruta_solicitada" => $ruta]);
         break;
