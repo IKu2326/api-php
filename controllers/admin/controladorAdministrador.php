@@ -1,14 +1,14 @@
 <?php
 
-require_once './models/admin/cliente.php';
+require_once './models/admin/administrador.php';
 
-class controladorCliente {
+class controladorAdministrador {
     
     public static function consultar() {
-        $Cliente = new Cliente();
-        $Clientes = $Cliente->obtenerTodos();
+        $Administrador = new Administrador();
+        $Administradors = $Administrador->obtenerTodos();
         
-        echo json_encode($Clientes);
+        echo json_encode($Administradors);
     }
 
     public static function consultar_Id() {
@@ -25,33 +25,33 @@ class controladorCliente {
             return;
         }
 
-        $Cliente = new Cliente();
-        $Clientes = $Cliente->obtenerPorId($id1, $id2,$nombre1, $nombre2);
+        $Administrador = new Administrador();
+        $Administradors = $Administrador->obtenerPorId($id1, $id2,$nombre1, $nombre2);
         
-        echo json_encode($Clientes);
+        echo json_encode($Administradors);
     }
 
 
     public static function editar() {
         $datos = json_decode(file_get_contents("php://input"), true);
 
-        if(!isset($datos['idCliente'], $datos['direccion'], $datos['complemento'])) {
+        if(!isset($datos['idAdministrador'], $datos['doc'], $datos['tipo'])) {
             http_response_code(400);
             echo json_encode(["mensaje" => "Faltan datos requeridos."]);
             return;
         }
 
-        $registro = Cliente::Editar(
-            $datos['idCliente'],
-            $datos['direccion'],
-            $datos['complemento']
+        $registro = Administrador::Editar(
+            $datos['idAdministrador'],
+            $datos['Doc'],
+            $datos['tipo']
         );
 
         if ($registro === true) {
             echo json_encode(["mensaje" => " Editado exitosamente."]);
         } else {
             http_response_code(500); 
-            echo json_encode(["mensaje" => "Error al Editar el cliente."]);
+            echo json_encode(["mensaje" => "Error al Editar el Administrador."]);
         }
     }
     public static function eliminar() {
@@ -67,14 +67,14 @@ class controladorCliente {
         $id2 = $datos['id2'] ?? null;
         $nombre2 = $datos['nombre2'] ?? null;
 
-        $FormaPago = new Cliente();
+        $FormaPago = new Administrador();
         $resultado = $FormaPago->eliminar($datos['id1'], $id2,$datos['nombre1'], $nombre2);
 
         if ($resultado) {
             echo json_encode(["mensaje" => " eliminado"]);
         } else {
             http_response_code(500);
-            echo json_encode(["mensaje" => "Error al eliminar el cliente ."]);
+            echo json_encode(["mensaje" => "Error al eliminar el Administrador ."]);
         }
     }
 }

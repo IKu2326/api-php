@@ -5,25 +5,6 @@ class Cliente extends ModeloBase {
         parent::__construct('cliente'); 
     }
 
-    public static function Crear($idCliente, $direccion, $complemento) {
-
-        $conn = Database::conectar();
-        $FormaPago = new FormaPago();
-        $resultado = $FormaPago->obtenerPorId(id1: $idCliente, nombre1: "idCliente");
-
-        if ($resultado){
-            return "cliente_duplicado";
-        }
-
-        $sql = "INSERT INTO cliente (idCliente, direccion, complemento) 
-        VALUES (:id, :direccion, :complemento)";
-        $stmt = $conn->prepare($sql);
-        return $stmt->execute([
-            ':id' => $idCliente,
-            ':direccion' => $direccion,
-            ':complemento' => $complemento,
-        ]);
-    }
 
     public static function Editar($idCliente, $direccion, $complemento) {
 

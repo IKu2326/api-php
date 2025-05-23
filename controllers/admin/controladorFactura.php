@@ -34,7 +34,7 @@ class controladorFactura {
         $datos = json_decode(file_get_contents("php://input"), true);
         
         if($datos){
-            if(!isset($datos['idFactura'], $datos['fecha'], $datos['iva'], $datos['base'], $datos['total']
+            if(!isset($datos['fecha'], $datos['iva'], $datos['base'], $datos['total']
             , $datos['cliente'], $datos['formaPago'])) {
             http_response_code(400);
             echo json_encode(["mensaje" => "Faltan datos requeridos."]);
@@ -47,7 +47,6 @@ class controladorFactura {
         
 
         $registro = Factura::Crear(
-            $datos['idFactura'],
             $datos['fecha'],
             $datos['iva'],
              $datos['base'],
@@ -57,10 +56,7 @@ class controladorFactura {
         );
 
 
-        if ($registro === "Factura_duplicada") {
-            http_response_code(409); 
-            echo json_encode(["mensaje" => "La Factura ya está registrada."]);
-        } elseif ($registro === true) {
+        if ($registro === true) {
             echo json_encode(["mensaje" => "Factura creada exitosamente."]);
         } else {
             http_response_code(500); 
