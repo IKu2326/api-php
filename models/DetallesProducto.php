@@ -52,7 +52,40 @@ class DetallesProducto{
 
     }
 
+    public function traerDetallesConsola($id)
+    {
+
+        if(!empty($id))
+        {
+            $sql= "
+
+            SELECT 
+             p.idProducto,
+             p.precioProducto,
+             p.nombreProducto,
+             p.descuentoProducto,
+             p.totalProducto,
+             c.sobreConsola,
+             crc.*
+             FROM producto p
+             JOIN consola c ON p.idProducto = c.idConsola
+             JOIN caracteristicasconsola crc ON c.idConsola = crc.idConsola 
+             WHERE p.idProducto = :id
+ 
+            ";
+
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bindParam(":id",$id,PDO::PARAM_STR);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        }
+
+    }
+
 }
+
+
 
 
 

@@ -41,6 +41,10 @@ switch ($ruta) {
     case 'obtenerDetallesProducto':
         ControladorMostrarDetallesProducto::mostrarDetallesProducto();
         break;
+
+     case 'obtenerDetallesConsola':
+        ControladorMostrarDetallesProducto::mostrarDetalleConsola();
+
     case 'Consultar_FormaPago':
         controladorFormaPago::consultar();
         break;
