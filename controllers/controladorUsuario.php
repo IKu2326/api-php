@@ -45,7 +45,6 @@ class ControladorUsuario
     public static function login()
     {
         $datos = json_decode(file_get_contents("php://input"), true);
-        var_dump($datos);
 
         if (!isset($datos['correo'], $datos['contrasena'])) {
             http_response_code(400);
@@ -58,11 +57,11 @@ class ControladorUsuario
         $resultado = $usuario->login($datos['correo'], $datos['contrasena']);
 
         if ($resultado) {
-            $key = "TU_CLAVE_SECRETA"; // Usa una clave segura
+            $key = "NVS_PRUEBA_FIRMA"; 
 
             $payload = [
-                "correo" => $resultado['correo'],
-                "nombre" => $resultado['nombre'],
+                "correo" => $resultado['correoUsuario'],
+                "nombre" => $resultado['nombreUsuario'],
                 "exp" => time() + 3600 // Token válido por 1 hora
             ];
 

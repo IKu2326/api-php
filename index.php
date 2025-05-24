@@ -14,6 +14,9 @@ require_once './controllers/admin/controladorCliente.php';
 require_once './controllers/admin/controladorProducto.php';
 require_once './controllers/admin/controladorFactura.php';
 require_once './controllers/admin/controladorUsuarioAdmin.php';
+require_once './controllers/admin/controladorAdministrador.php';
+require_once './controllers/admin/controladorRol.php';
+require_once './controllers/admin/controladorTipoDoc.php';
 
 $ruta = trim($_GET['ruta'] ?? '');
 
@@ -81,9 +84,6 @@ switch ($ruta) {
     case 'ConsultarPorID_Cliente':
         controladorCliente::consultar_Id();
         break;
-    case 'Crear_Cliente':
-        controladorCliente::crear();
-        break;
     case 'Editar_Cliente':
         controladorCliente::editar();
         break;
@@ -127,13 +127,43 @@ switch ($ruta) {
         ControladorUsuarioAdmin::consultar_Id();
         break;
     case 'Crear_UsuarioAdmin':
-        ControladorUsuarioAdmin::crear();
+        controladorUsuarioAdmin::crear();
         break;
     case 'Editar_UsuarioAdmin':
         controladorUsuarioAdmin::editar();
         break;
     case 'Eliminar_UsuarioAdmin':
         controladorUsuarioAdmin::eliminar();
+        break;
+    case 'Consultar_Administrador':
+        controladorAdministrador::consultar();
+        break;
+    case 'ConsultarPorID_Administrador':
+        controladorAdministrador::consultar_Id();
+        break;
+    case 'Editar_Administrador':
+        controladorAdministrador::editar();
+        break;
+    case 'Eliminar_Administrador':
+        controladorAdministrador::eliminar();
+        break;
+    case 'Consultar_Rol':
+        controladorRoles::consultar();
+        break;
+    case 'ConsultarPorID_Rol':
+        controladorRoles::consultar_Id();
+        break;
+    case 'Eliminar_Rol':
+        controladorRoles::eliminar();
+        break;
+    case 'Consultar_TipoDoc':
+        controladorTipoDoc::consultar();
+        break;
+    case 'ConsultarPorID_TipoDoc':
+        controladorTipoDoc::consultar_Id();
+        break;
+    case 'Eliminar_TipoDoc':
+        controladorTipoDoc::eliminar();
         break;
     default:
         echo json_encode(["mensaje" => "Ruta no encontrada.", "ruta_solicitada" => $ruta]);

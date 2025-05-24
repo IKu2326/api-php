@@ -58,6 +58,7 @@ class Usuario
                 'seapellidoUsuario' => $usuario['seapellidoUsuario'],
                 'correoUsuario' => $usuario['correoUsuario'],
                 'celularUsuario' => $usuario['celularUsuario'],
+                'idRol' => $usuario['idRol'],	
             ];
         }
 
