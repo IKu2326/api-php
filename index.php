@@ -7,6 +7,7 @@ require_once './controllers/controladorUsuario.php';
 require_once './controllers/controladorMostrarProducto.php';
 require_once './controllers/controladorDetallesProducto.php';
 require_once './controllers/controladorObtenerProductosPorIds.php';
+require_once './controllers/ControladorCalificacionesProducto.php';
 //admin
 require_once './controllers/admin/controladorFormaPago.php';
 require_once './controllers/admin/controladorCalificacionCliente.php';
@@ -42,11 +43,17 @@ switch ($ruta) {
     case 'obtenerDetallesProducto':
         ControladorMostrarDetallesProducto::mostrarDetallesProducto();
         break;
-     case 'obtenerDetallesConsola':
+    case 'obtenerDetallesConsola':
         ControladorMostrarDetallesProducto::mostrarDetalleConsola();
         break;
     case 'obtenerCarrito':
         ControladorObtenerProductosPorIds::obtenerProductosDelCarrito();
+        break;
+    case 'obtenerCalificacionesProducto':
+        ControladorCalificacionesProducto::obtenerCalificaciones();
+        break;
+    case 'crearCalificacionProducto':
+        ControladorCalificacionesProducto::crearCalificacion();
         break;
     case 'Consultar_FormaPago':
         controladorFormaPago::consultar();

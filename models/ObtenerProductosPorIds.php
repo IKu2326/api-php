@@ -13,12 +13,11 @@ class ObtenerProductosPorIds {
     public function obtenerPorIds($ids)
     {
         if (!empty($ids) && is_array($ids)) {
-            // Convertimos array a placeholders dinámicos (?, ?, ?, ...)
             $placeholders = implode(',', array_fill(0, count($ids), '?'));
 
             $sql = "
                 SELECT 
-                    p.idProducto,
+                    p.idProducto,   
                     p.nombreProducto,
                     p.precioProducto,
                     p.totalProducto,
