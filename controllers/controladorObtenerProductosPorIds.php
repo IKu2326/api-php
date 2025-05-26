@@ -10,6 +10,7 @@ class ControladorObtenerProductosPorIds {
         $ids = $input['ids'] ?? [];
 
         $modelo = new ObtenerProductosPorIds();
+        
         $productos = $modelo->obtenerPorIds($ids);
 
         echo json_encode($productos);
