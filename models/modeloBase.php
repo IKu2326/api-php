@@ -15,7 +15,7 @@ class ModeloBase {
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function obtenerPorId($id1, $id2 = null, $nombre1, $nombre2 = null) {
+    public function obtenerPorId($id1,$nombre1, $id2 = null, $nombre2 = null) {
         if ($id2 === null && $nombre2 === null) {
             $stmt = $this->db->prepare("SELECT * FROM {$this->tabla} WHERE $nombre1 = :id1");
             $stmt->execute(['id1' => $id1]);
