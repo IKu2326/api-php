@@ -1,18 +1,29 @@
 <?php
 require_once './models/modeloBase.php';
-class Producto extends ModeloBase {
-    public function __construct() {
-        parent::__construct('producto'); 
+class Producto extends ModeloBase
+{
+    public function __construct()
+    {
+        parent::__construct('producto');
     }
 
-    public static function Crear($idProducto, $nombreProducto, $precioProducto, $garantiaProducto, $idTipoProducto
-    , $idAdministrador, $stock, $cantidad) {
+    public static function Crear(
+        $idProducto,
+        $nombreProducto,
+        $precioProducto,
+        $garantiaProducto,
+        $idTipoProducto
+        ,
+        $idAdministrador,
+        $stock,
+        $cantidad
+    ) {
 
         $conn = Database::conectar();
         $FormaPago = new FormaPago();
         $resultado = $FormaPago->obtenerPorId(id1: $idProducto, nombre1: "idProducto");
 
-        if ($resultado){
+        if ($resultado) {
             return "Producto_duplicado";
         }
 
@@ -32,8 +43,17 @@ class Producto extends ModeloBase {
         ]);
     }
 
-    public static function Editar($idProducto, $nombreProducto, $precioProducto, $garantiaProducto, $idTipoProducto
-    , $idAdministrador, $stock, $cantidad) {
+    public static function Editar(
+        $idProducto,
+        $nombreProducto,
+        $precioProducto,
+        $garantiaProducto,
+        $idTipoProducto
+        ,
+        $idAdministrador,
+        $stock,
+        $cantidad
+    ) {
 
         $conn = Database::conectar();
 
@@ -51,6 +71,54 @@ class Producto extends ModeloBase {
             ':stock' => $stock,
             ':cantidad' => $cantidad,
         ]);
+    }
+
+    public function filtrarProductos($filtros = [])
+    {
+        $conn = Database::conectar();
+
+        $sql = "SELECT * FROM producto WHERE 1=1";
+        $params = [];
+
+        // Por nombre (LIKE)
+        if (!empty($filtros['nombreProducto'])) {
+            $sql .= " AND nombreProducto LIKE :nombreProducto";
+            $params[':nombreProducto'] = '%' . $filtros['nombreProducto'] . '%';
+        }
+
+        // Precio mínimo
+        if (!empty($filtros['precioMin'])) {
+            $sql .= " AND precioProducto >= :precioMin";
+            $params[':precioMin'] = $filtros['precioMin'];
+        }
+
+        // Precio máximo
+        if (!empty($filtros['precioMax'])) {
+            $sql .= " AND precioProducto <= :precioMax";
+            $params[':precioMax'] = $filtros['precioMax'];
+        }
+
+        // Tipo de producto
+        if (!empty($filtros['tipoProducto'])) {
+            $sql .= " AND idTipoProducto = :tipoProducto";
+            $params[':tipoProducto'] = $filtros['tipoProducto'];
+        }
+
+        // ID administrador creador
+        if (!empty($filtros['adminId'])) {
+            $sql .= " AND idAdministrador_crear = :adminId";
+            $params[':adminId'] = $filtros['adminId'];
+        }
+
+        // Stock mínimo
+        if (!empty($filtros['stock'])) {
+            $sql .= " AND stock = :stock";
+            $params[':stock'] = $filtros['stock'];
+        }
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }

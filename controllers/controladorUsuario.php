@@ -4,8 +4,6 @@ require_once './vendor/autoload.php';
 
 use Firebase\JWT\JWT;
 
-
-
 class ControladorUsuario
 {
     public static function registrar()

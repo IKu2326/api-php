@@ -13,10 +13,13 @@ require_once './controllers/admin/controladorCalificacionCliente.php';
 require_once './controllers/admin/controladorCliente.php';
 require_once './controllers/admin/controladorProducto.php';
 require_once './controllers/admin/controladorFactura.php';
+require_once './controllers/admin/controladorGenero.php';
+require_once './controllers/admin/controladorDetallesFactura.php';
 require_once './controllers/admin/controladorUsuarioAdmin.php';
 require_once './controllers/admin/controladorAdministrador.php';
 require_once './controllers/admin/controladorRol.php';
 require_once './controllers/admin/controladorTipoDoc.php';
+require_once './controllers/admin/controladorPlataforma.php';
 
 $ruta = trim($_GET['ruta'] ?? '');
 
@@ -84,12 +87,6 @@ switch ($ruta) {
     case 'ConsultarPorID_Cliente':
         controladorCliente::consultar_Id();
         break;
-    case 'Editar_Cliente':
-        controladorCliente::editar();
-        break;
-    case 'Eliminar_Cliente':
-        controladorCliente::eliminar();
-        break;
     case 'Consultar_Producto':
         controladorProducto::consultar();
         break;
@@ -141,12 +138,6 @@ switch ($ruta) {
     case 'ConsultarPorID_Administrador':
         controladorAdministrador::consultar_Id();
         break;
-    case 'Editar_Administrador':
-        controladorAdministrador::editar();
-        break;
-    case 'Eliminar_Administrador':
-        controladorAdministrador::eliminar();
-        break;
     case 'Consultar_Rol':
         controladorRoles::consultar();
         break;
@@ -162,8 +153,50 @@ switch ($ruta) {
     case 'ConsultarPorID_TipoDoc':
         controladorTipoDoc::consultar_Id();
         break;
-    case 'Eliminar_TipoDoc':
-        controladorTipoDoc::eliminar();
+    case 'Consultar_DetalleFactura':
+        controladorDetallesFactura::consultar();
+        break;
+    case 'ConsultarPorID_DetalleFactura':
+        controladorDetallesFactura::consultar_Id();
+        break;
+    case 'Crear_DetalleFactura':
+        controladorDetallesFactura::crear();
+        break;
+    case 'Editar_DetalleFactura':
+        controladorDetallesFactura::editar();
+        break;
+    case 'Eliminar_DetalleFactura':
+        controladorDetallesFactura::eliminar();
+        break;
+    case 'Consultar_Genero':
+        controladorGenero::consultar();
+        break;
+    case 'ConsultarPorID_Genero':
+        controladorGenero::consultar_Id();
+        break;
+    case 'Crear_Genero':
+        controladorGenero::crear();
+        break;
+    case 'Editar_Genero':
+        controladorGenero::editar();
+        break;
+    case 'Eliminar_Genero':
+        controladorGenero::eliminar();
+        break;
+    case 'Consultar_Plataforma':
+        controladorPlataforma::consultar();
+        break;
+    case 'ConsultarPorID_Plataforma':
+        controladorPlataforma::consultar_Id();
+        break;
+    case 'Crear_Plataforma':
+        controladorPlataforma::crear();
+        break;
+    case 'Editar_Plataforma':
+        controladorPlataforma::editar();
+        break;
+    case 'Eliminar_Plataforma':
+        controladorPlataforma::eliminar();
         break;
     default:
         echo json_encode(["mensaje" => "Ruta no encontrada.", "ruta_solicitada" => $ruta]);

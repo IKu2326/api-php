@@ -71,32 +71,61 @@ class UsuarioAdmin extends ModeloBase
     }
 
     public static function Editar(
-        $idProducto,
-        $nombreProducto,
-        $precioProducto,
-        $garantiaProducto,
-        $idTipoProducto,
-        $idAdministrador,
-        $stock,
-        $cantidad
+        $id1,
+        $nombreUsuario,
+        $seNombreUsuario,
+        $apellidoUsuario,
+        $seApellidoUsuario,
+        $correoUsuario,
+        $celularUsuario,
+        $contrasenaUsuario,
+        $idRol,
+        ?string $direccion = null,
+        ?string $complemento = null,
+        ?string $documento = null,
+        ?string $tipo = null
     ) {
-
         $conn = Database::conectar();
 
-        $sql = "UPDATE Producto SET nombreProducto = :nombre, precioProducto = :precio, garantiaProducto = :garantia,
-         idTipoProducto = :tipo, idAdministrador_crear = :administrador, stock = :stock, cantidad = :cantidad, 
-            WHERE idProducto = :id1";
+        $sql = "UPDATE Usuario SET nombreUsuario = :nombre, senombreUsuario = :senombre, apellidoUsuario = :apellido,
+         seapellidoUsuario = :seapellido, correoUsuario = :correo, celularUsuario = :celular, contrasenaUsuario = :contra,
+         idRol = :rol WHERE idUsuario = :id1";
         $stmt = $conn->prepare($sql);
-        return $stmt->execute([
-            ':id1' => $idProducto,
-            ':nombre' => $nombreProducto,
-            ':precio' => $precioProducto,
-            ':garantia' => $garantiaProducto,
-            ':tipo' => $idTipoProducto,
-            ':administrador' => $idAdministrador,
-            ':stock' => $stock,
-            ':cantidad' => $cantidad,
-        ]);
+        if($stmt->execute([
+            ':id1' => $id1,
+            ':nombre' => $nombreUsuario,
+            ':senombre' => $seNombreUsuario,
+            ':apellido' => $apellidoUsuario,
+            ':seapellido' => $seApellidoUsuario,
+            ':correo' => $correoUsuario,
+            ':celular' => $celularUsuario,
+            ':contra' => $contrasenaUsuario,
+            ':rol' => $idRol,
+        ])){
+            if ($idRol == 1) {
+                $sql = "UPDATE cliente SET direccion = :direccion, complemento = :complemento
+                WHERE idCliente = :id1";
+                $stmt = $conn->prepare($sql);
+                return $stmt->execute([
+                    ':id1' => $id1,
+                    ':direccion' => $direccion,
+                    ':complemento' => $complemento,
+                ]);
+            } else {
+                $sql = "UPDATE administrador SET documentoAdministrador = :doc, pf_fk_tdoc = :tipo
+                WHERE idAdministrador = :id1";
+                $stmt = $conn->prepare($sql);
+                return $stmt->execute([
+                    ':id1' => $id1,
+                    ':doc' => $documento,
+                    ':tipo' => $tipo,
+                ]);
+            }
+        } else {
+            $error = $stmt->errorInfo();
+            echo "❌ Error en INSERT usuario: " . $error[2];
+        }
+        
     }
 
 }
