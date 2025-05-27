@@ -60,6 +60,7 @@ class ControladorUsuario
             $payload = [
                 "id" => $resultado['idUsuario'],
                 "correo" => $resultado['correoUsuario'],
+                "celular" => $resultado['celularUsuario'],
                 "nombre" => $resultado['nombreUsuario'],
                 "segundoNombre" => $resultado['senombreUsuario'],
                 "apellido" => $resultado['apellidoUsuario'],
