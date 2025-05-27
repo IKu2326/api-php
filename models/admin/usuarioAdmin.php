@@ -21,10 +21,10 @@ class UsuarioAdmin extends ModeloBase
         ?string $documento = null,
         ?string $tipo = null
     ) {
-        $clave_hash = password_hash($contrasenaUsuario, PASSWORD_DEFAULT);
         $conn = Database::conectar();
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+        $clave_hash = password_hash($contrasenaUsuario, PASSWORD_DEFAULT);
+        
         $sql = "INSERT INTO usuario ( nombreUsuario, seNombreUsuario, apellidoUsuario, seapellidoUsuario, correoUsuario, celularUsuario, contrasenaUsuario, idRol ) 
         VALUES (:nombreUsuario, :senombreUsuario, :apellidoUsuario, :seapellidoUsuario, 
         :correoUsuario, :celularUsuario, :contrasenaUsuario, :idRol)";
