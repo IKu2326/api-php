@@ -9,7 +9,6 @@ class ControladorUsuario
     public static function registrar()
     {
         $datos = json_decode(file_get_contents("php://input"), true);
-        var_dump($datos);
 
         if (!isset($datos['nombre'], $datos['segundoNombre'], $datos['apellido'], $datos['segundoApellido'], $datos['correo'], $datos['celular'], $datos['contrasena'])) {
             http_response_code(400);
