@@ -26,7 +26,7 @@ class controladorAdministrador {
         }
 
         $Administrador = new Administrador();
-        $Administradors = $Administrador->obtenerPorId($id1, $id2,$nombre1, $nombre2);
+        $Administradors = $Administrador->obtenerPorId($id1, $nombre1,$id2, $nombre2);
         
         echo json_encode($Administradors);
     }

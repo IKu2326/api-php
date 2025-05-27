@@ -26,7 +26,7 @@ class controladorCliente {
         }
 
         $Cliente = new Cliente();
-        $Clientes = $Cliente->obtenerPorId($id1, $id2,$nombre1, $nombre2);
+        $Clientes = $Cliente->obtenerPorId($id1, $nombre1,$id2, $nombre2);
         
         echo json_encode($Clientes);
     }
