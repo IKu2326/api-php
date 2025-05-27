@@ -4,8 +4,6 @@ require_once './vendor/autoload.php';
 
 use Firebase\JWT\JWT;
 
-
-
 class ControladorUsuario
 {
     public static function registrar()
@@ -60,8 +58,12 @@ class ControladorUsuario
             $key = "NVS_PRUEBA_FIRMA"; 
 
             $payload = [
+                "id" => $resultado['idUsuario'],
                 "correo" => $resultado['correoUsuario'],
                 "nombre" => $resultado['nombreUsuario'],
+                "segundoNombre" => $resultado['senombreUsuario'],
+                "apellido" => $resultado['apellidoUsuario'],
+                "segundoApellido" => $resultado['seapellidoUsuario'],
                 "exp" => time() + 3600 // Token válido por 1 hora
             ];
 

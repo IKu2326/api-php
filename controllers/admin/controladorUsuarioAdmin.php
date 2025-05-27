@@ -1,5 +1,7 @@
 <?php
 require_once './models/admin/usuarioAdmin.php';
+require_once './models/admin/cliente.php';
+require_once './models/admin/administrador.php';
 
 class ControladorUsuarioAdmin
 {
@@ -25,7 +27,7 @@ class ControladorUsuarioAdmin
         }
 
         $Usuario = new UsuarioAdmin();
-        $Usuarios = $Usuario->obtenerPorId($id1, $id2,$nombre1, $nombre2);
+        $Usuarios = $Usuario->obtenerPorId($id1, $nombre1,$id2, $nombre2);
         
         echo json_encode($Usuarios);
     }
@@ -128,6 +130,7 @@ class ControladorUsuarioAdmin
             if ($datos['idRol'] == 1) {
                 if (
                     !isset(
+                    $datos['id'],
                     $datos['nombre'],
                     $datos['segundoNombre'],
                     $datos['apellido'],
@@ -144,6 +147,7 @@ class ControladorUsuarioAdmin
                     return;
                 } else {
                     $registro = $usuario->Editar(
+                        $datos["id"],
                         $datos['nombre'],
                         $datos['segundoNombre'],
                         $datos['apellido'],
@@ -151,6 +155,7 @@ class ControladorUsuarioAdmin
                         $datos['correo'],
                         $datos['celular'],
                         $datos['contrasena'],
+                        $datos['idRol'],
                         $datos['direccion'],
                         $datos['complemento'],
                     );
@@ -158,6 +163,7 @@ class ControladorUsuarioAdmin
             } else {
                 if (
                     !isset(
+                    $datos['id'],
                     $datos['nombre'],
                     $datos['segundoNombre'],
                     $datos['apellido'],
@@ -174,6 +180,7 @@ class ControladorUsuarioAdmin
                     return;
                 } else {
                     $registro = $usuario->Editar(
+                        $datos["id"],
                         $datos['nombre'],
                         $datos['segundoNombre'],
                         $datos['apellido'],
@@ -181,15 +188,16 @@ class ControladorUsuarioAdmin
                         $datos['correo'],
                         $datos['celular'],
                         $datos['contrasena'],
-                        $datos['direccion'],
-                        $datos['complemento'],
+                        $datos['idRol'],
+                        documento: $datos['documentoAdministrador'],
+                        tipo: $datos['tipoDoc'],
                     );
                 }
             }
         }
 
         if ($registro === true) {
-            echo json_encode(["mensaje" => "Usuario registrado exitosamente."]);
+            echo json_encode(["mensaje" => "Usuario Editado exitosamente."]);
         } else {
             http_response_code(500);
             echo json_encode(["mensaje" => "Error al registrar el usuario."]);
@@ -200,7 +208,7 @@ class ControladorUsuarioAdmin
 
         $datos = json_decode(file_get_contents("php://input"), true);
 
-        if(!isset($datos['id1'], $datos['id2'], $datos['nombre1'], $datos['nombre2'])) {
+        if(!isset($datos['id1'], $datos['nombre1'])) {
             http_response_code(400);
             echo json_encode(["mensaje" => "Faltan datos requeridos."]);
             return;
@@ -209,10 +217,16 @@ class ControladorUsuarioAdmin
         $id2 = $datos['id2'] ?? null;
         $nombre2 = $datos['nombre2'] ?? null;
 
+        $Cliente = new Cliente();
+        $ResultadoC = $Cliente->eliminar($datos['id1'], $id2,"idCliente", $nombre2);
+
+        $Administrador = new Administrador();
+        $ResultadoA = $Administrador->eliminar($datos['id1'], $id2,"idAdministrador", $nombre2);
+
         $Usuario = new UsuarioAdmin();
         $resultado = $Usuario->eliminar($datos['id1'], $id2,$datos['nombre1'], $nombre2);
 
-        if ($resultado) {
+        if ($resultado && $ResultadoC && $ResultadoA) {
             echo json_encode(["mensaje" => " eliminado"]);
         } else {
             http_response_code(500);
