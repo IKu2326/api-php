@@ -116,4 +116,20 @@ class controladorProducto {
             echo json_encode(["mensaje" => "Error al eliminar el Producto ."]);
         }
     }
+        public static function filtroProductos()
+    {
+        $datos = $_GET; // o $_POST o JSON
+
+        $producto = new Producto();
+        $resultados = $producto->filtrarProductos([
+            'idProducto' => $datos['idProducto'] ?? null,
+            'nombreProducto' => $datos['nombreProducto'] ?? null,
+            'precioMin' => $datos['precioMin'] ?? null,
+            'precioMax' => $datos['precioMax'] ?? null,
+            'adminId' => $datos['idAdministrador_crear'] ?? null,
+            'stock' => $datos['stock'] ?? null,
+        ]);
+
+        echo json_encode($resultados);
+    }
 }
