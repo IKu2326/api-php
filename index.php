@@ -8,6 +8,8 @@ require_once './controllers/controladorMostrarProducto.php';
 require_once './controllers/controladorDetallesProducto.php';
 require_once './controllers/controladorObtenerProductosPorIds.php';
 require_once './controllers/ControladorCalificacionesProducto.php';
+require_once './controllers/ControladorGuardarFactura.php';
+require_once './controllers/controladorSoporte.php';
 //admin
 require_once './controllers/admin/controladorFormaPago.php';
 require_once './controllers/admin/controladorCalificacionCliente.php';
@@ -51,6 +53,12 @@ switch ($ruta) {
         break;
     case 'obtenerCarrito':
         ControladorObtenerProductosPorIds::obtenerProductosDelCarrito();
+        break;
+    case 'Crear_DetalleFacturaCompleto':
+        ControladorGuardarFactura::guardarFactura();
+        break;
+    case 'EnviarPQRS':
+        ControladorSoporte::enviarPQRS();
         break;
     case 'obtenerCalificacionesProducto':
         ControladorCalificacionesProducto::obtenerCalificaciones();
