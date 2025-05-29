@@ -20,13 +20,18 @@ class ControladorPerfil
             $datos['correo'] ?? null,
             $datos['celular'] ?? null,
             $datos['contrasena'] ?? null,
-            $datos['nuevaContrasena'] ?? null
+            $datos['nuevaContrasena'] ?? null,
+            $datos['direccion'] ?? null,
+            $datos['complemento'] ?? null,
         );
 
 
-        if ($actualizacion === true) {
+        if ($actualizacion && is_array($actualizacion)) {
             http_response_code(200);
-            echo json_encode(["mensaje" => "Perfil actualizado exitosamente."]);
+            echo json_encode([
+                "mensaje" => "Perfil actualizado exitosamente.",
+                "usuario" => $actualizacion
+            ]);
         } elseif ($actualizacion === false) {
             http_response_code(400);
             echo json_encode(["mensaje" => "Contraseña Incorrecta."]);

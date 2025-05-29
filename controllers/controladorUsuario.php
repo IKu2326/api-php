@@ -58,12 +58,7 @@ class ControladorUsuario
 
             $payload = [
                 "id" => $resultado['idUsuario'],
-                "correo" => $resultado['correoUsuario'],
-                "celular" => $resultado['celularUsuario'],
-                "nombre" => $resultado['nombreUsuario'],
-                "segundoNombre" => $resultado['senombreUsuario'],
-                "apellido" => $resultado['apellidoUsuario'],
-                "segundoApellido" => $resultado['seapellidoUsuario'],
+                "rol" => $resultado['idRol'],
                 "exp" => time() + 3600 // Token válido por 1 hora
             ];
 
