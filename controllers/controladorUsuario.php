@@ -9,7 +9,6 @@ class ControladorUsuario
     public static function registrar()
     {
         $datos = json_decode(file_get_contents("php://input"), true);
-        var_dump($datos);
 
         if (!isset($datos['nombre'], $datos['segundoNombre'], $datos['apellido'], $datos['segundoApellido'], $datos['correo'], $datos['celular'], $datos['contrasena'])) {
             http_response_code(400);
@@ -59,12 +58,7 @@ class ControladorUsuario
 
             $payload = [
                 "id" => $resultado['idUsuario'],
-                "correo" => $resultado['correoUsuario'],
-                "celular" => $resultado['celularUsuario'],
-                "nombre" => $resultado['nombreUsuario'],
-                "segundoNombre" => $resultado['senombreUsuario'],
-                "apellido" => $resultado['apellidoUsuario'],
-                "segundoApellido" => $resultado['seapellidoUsuario'],
+                "rol" => $resultado['idRol'],
                 "exp" => time() + 3600 // Token válido por 1 hora
             ];
 

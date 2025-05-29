@@ -10,6 +10,7 @@ require_once './controllers/controladorObtenerProductosPorIds.php';
 require_once './controllers/ControladorCalificacionesProducto.php';
 require_once './controllers/ControladorGuardarFactura.php';
 require_once './controllers/controladorSoporte.php';
+require_once './controllers/controladorPerfil.php';
 //admin
 require_once './controllers/admin/controladorFormaPago.php';
 require_once './controllers/admin/controladorCalificacionCliente.php';
@@ -32,6 +33,9 @@ switch ($ruta) {
         break;
     case 'login':
         ControladorUsuario::login();
+        break;
+    case 'actualizarPerfil':
+        ControladorPerfil::actualizarPerfil();
         break;
     case 'obtenerProductosDesc':
         ControladorMostrarProducto::productosMasVendidos();
