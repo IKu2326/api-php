@@ -43,6 +43,6 @@ class CalificacionesProducto {
         $stmt->bindValue(4, $comentarioCalificacion, PDO::PARAM_STR);
 
         return $stmt->execute();
-    }
+    }               
 }
 ?>
