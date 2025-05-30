@@ -49,7 +49,31 @@ class Usuario
 
         $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($usuario && password_verify($contrasena, $usuario['contrasenaUsuario'])) {
+        if (!$usuario) {
+            return null; // Usuario no encontrado
+        }
+
+        // Verifica la contraseña antes de continuar
+        if (!password_verify($contrasena, $usuario['contrasenaUsuario'])) {
+            return null; // Contraseña incorrecta
+        }
+
+
+        if ($usuario['idRol'] == 1) {
+            $stmt = $this->conn->prepare("SELECT u.idUsuario, u.nombreUsuario, u.senombreUsuario, u.apellidoUsuario, 
+            u.seapellidoUsuario, u.correoUsuario, u.celularUsuario, u.contrasenaUsuario, u.idRol, c.direccion
+            FROM usuario u 
+            JOIN cliente c ON u.idUsuario = c.idCliente
+            WHERE correoUsuario = :correo");
+            $stmt->execute([':correo' => $correo]);
+
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+            if (!$usuario) {
+                return null; // No se encontró el cliente
+            }
+
             return [
                 'idUsuario' => $usuario['idUsuario'],
                 'nombreUsuario' => $usuario['nombreUsuario'],
@@ -58,9 +82,38 @@ class Usuario
                 'seapellidoUsuario' => $usuario['seapellidoUsuario'],
                 'correoUsuario' => $usuario['correoUsuario'],
                 'celularUsuario' => $usuario['celularUsuario'],
-                'idRol' => $usuario['idRol'],	
+                'direccion' => $usuario['direccion'], 
+                'complemento' => $usuario['complemento'] ?? null,
+                'idRol' => $usuario['idRol'],
+            ];
+        } else {
+            $stmt = $this->conn->prepare("SELECT u.idUsuario, u.nombreUsuario, u.senombreUsuario, u.apellidoUsuario, 
+            u.seapellidoUsuario, u.correoUsuario, u.celularUsuario, u.contrasenaUsuario, u.idRol, a.documentoAdministrador, a.pf_fk_tdoc
+            FROM usuario u 
+            JOIN administrador a ON u.idUsuario = a.idAdministrador
+            WHERE correoUsuario = :correo");
+            $stmt->execute([':correo' => $correo]);
+
+            $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$usuario) {
+                return null; // No se encontró el administrador
+            }
+
+            return [
+                'idUsuario' => $usuario['idUsuario'],
+                'nombreUsuario' => $usuario['nombreUsuario'],
+                'senombreUsuario' => $usuario['senombreUsuario'],
+                'apellidoUsuario' => $usuario['apellidoUsuario'],
+                'seapellidoUsuario' => $usuario['seapellidoUsuario'],
+                'correoUsuario' => $usuario['correoUsuario'],
+                'celularUsuario' => $usuario['celularUsuario'],
+                'documentoAdministrador' => $usuario['documentoAdministrador'] ?? null,
+                'tipoDocumento' => $usuario['pf_fk_tdoc'] ?? null,
+                'idRol' => $usuario['idRol'],
             ];
         }
+
 
         return false;
     }
