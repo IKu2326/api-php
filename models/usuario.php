@@ -14,6 +14,8 @@ class Usuario
     {
         $clave_hash = password_hash($contrasena, PASSWORD_DEFAULT);
 
+        $correo = trim(strtolower($correo));
+
         $sqlVerificar = "SELECT COUNT(*) FROM usuario WHERE correoUsuario = :correo";
         $stmt = $this->conn->prepare($sqlVerificar);
         $stmt->bindParam(':correo', $correo);
@@ -40,10 +42,16 @@ class Usuario
             ':contrasenaUsuario' => $clave_hash,
             ':idRol' => 1
         ]);
+
+        
+
+
     }
 
     public function login($correo, $contrasena)
     {
+
+        $correo = trim(strtolower($correo));
         $stmt = $this->conn->prepare("SELECT * FROM usuario WHERE correoUsuario = :correo");
         $stmt->execute([':correo' => $correo]);
 
@@ -82,7 +90,7 @@ class Usuario
                 'seapellidoUsuario' => $usuario['seapellidoUsuario'],
                 'correoUsuario' => $usuario['correoUsuario'],
                 'celularUsuario' => $usuario['celularUsuario'],
-                'direccion' => $usuario['direccion'], 
+                'direccion' => $usuario['direccion'],
                 'complemento' => $usuario['complemento'] ?? null,
                 'idRol' => $usuario['idRol'],
             ];

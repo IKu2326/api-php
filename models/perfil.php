@@ -78,7 +78,7 @@ class Perfil
 
     public function obtenerUsuarioPorId($idUsuario)
     {
-        $stmt = $this->conn->prepare("SELECT u.nombreUsuario, u.senombreUsuario, u.apellidoUsuario, 
+        $stmt = $this->conn->prepare("SELECT u.idUsuario, u.nombreUsuario, u.senombreUsuario, u.apellidoUsuario, 
         u.seapellidoUsuario, u.correoUsuario, u.celularUsuario, c.direccion, c.complemento
         FROM usuario u 
         LEFT JOIN cliente c ON u.idUsuario = c.idCliente

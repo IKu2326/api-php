@@ -25,7 +25,9 @@ class ControladorUsuario
             $datos['segundoApellido'],
             $datos['correo'],
             $datos['celular'],
-            $datos['contrasena']
+            $datos['contrasena'],
+            $datos['direccion'],
+            $datos['complemento'] ?? null
         );
 
         if ($registro === "correo_duplicado") {
