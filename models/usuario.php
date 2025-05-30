@@ -10,7 +10,7 @@ class Usuario
         $this->conn = Database::conectar();
     }
 
-    public function registrar($nombre, $segundoNombre, $apellido, $segundoApellido, $correo, $celular, $contrasena)
+    public function registrar($nombre, $segundoNombre, $apellido, $segundoApellido, $correo, $celular, $contrasena, $direccion, $complemento)
     {
         $clave_hash = password_hash($contrasena, PASSWORD_DEFAULT);
 
@@ -32,7 +32,7 @@ class Usuario
         :correoUsuario, :celularUsuario, :contrasenaUsuario, :idRol)";
         $stmt = $this->conn->prepare($sql);
 
-        return $stmt->execute([
+        $stmt->execute([
             ':nombreUsuario' => $nombre,
             ':senombreUsuario' => $segundoNombre,
             ':apellidoUsuario' => $apellido,
@@ -43,9 +43,15 @@ class Usuario
             ':idRol' => 1
         ]);
 
-        
+         $ultimo_id = $this->conn->lastInsertId();
 
-
+         $sql = "INSERT INTO cliente (idCliente, direccion, complemento) 
+         VALUES (:id, :direccion, :complemento)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $ultimo_id);
+        $stmt->bindParam(':direccion', $direccion);
+        $stmt->bindParam(':complemento', $complemento);
+        return $stmt->execute();
     }
 
     public function login($correo, $contrasena)
