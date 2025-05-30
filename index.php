@@ -8,6 +8,7 @@ require_once './controllers/controladorMostrarProducto.php';
 require_once './controllers/controladorDetallesProducto.php';
 require_once './controllers/controladorObtenerProductosPorIds.php';
 require_once './controllers/ControladorCalificacionesProducto.php';
+require_once './controllers/controladorImagenes.php';
 //admin
 require_once './controllers/admin/controladorFormaPago.php';
 require_once './controllers/admin/controladorCalificacionCliente.php';
@@ -21,6 +22,9 @@ require_once './controllers/admin/controladorAdministrador.php';
 require_once './controllers/admin/controladorRol.php';
 require_once './controllers/admin/controladorTipoDoc.php';
 require_once './controllers/admin/controladorPlataforma.php';
+require_once './controllers/admin/controladorJuego.php';
+require_once './controllers/admin/controladorConsola.php';
+
 
 $ruta = trim($_GET['ruta'] ?? '');
 
@@ -99,6 +103,9 @@ switch ($ruta) {
         break;
     case 'ConsultarPorID_Producto':
         controladorProducto::consultar_Id();
+        break;
+    case 'Consultar_ProductosFiltrados':
+        controladorProducto::filtroProductos();
         break;
     case 'Crear_Producto':
         controladorProducto::crear();
@@ -204,6 +211,39 @@ switch ($ruta) {
         break;
     case 'Eliminar_Plataforma':
         controladorPlataforma::eliminar();
+        break;
+    case 'Consultar_Juego':
+        controladorJuego::consultar();
+        break;
+    case 'ConsultarPorID_Juego':
+        controladorJuego::consultar_Id();
+        break;
+    case 'Editar_Juego':
+        controladorJuego::editar();
+        break;
+    case 'Eliminar_Juego':
+        controladorJuego::eliminar();
+        break;
+    case 'Consultar_Consola':
+        controladorConsola::consultar();
+        break;
+    case 'ConsultarPorID_Consola':
+        controladorConsola::consultar_Id();
+        break;
+    case 'Editar_Consola':
+        controladorConsola::editar();
+        break;
+    case 'Eliminar_Consola':
+        controladorConsola::eliminar();
+        break;
+    case 'Subir_Imagenes':
+        ControladorImagenes::subirImagenes();
+        break;
+    case 'Consultar_ImagenesCategoria':
+        ControladorImagenes::consultar();
+        break;
+    case 'ConsultarPorId_Imagenes':
+        ControladorImagenes::consultarPorId();
         break;
     default:
         echo json_encode(["mensaje" => "Ruta no encontrada.", "ruta_solicitada" => $ruta]);

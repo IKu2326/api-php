@@ -121,12 +121,14 @@ class controladorProducto {
         $datos = $_GET; // o $_POST o JSON
 
         $producto = new Producto();
+        
         $resultados = $producto->filtrarProductos([
             'idProducto' => $datos['idProducto'] ?? null,
             'nombreProducto' => $datos['nombreProducto'] ?? null,
             'precioMin' => $datos['precioMin'] ?? null,
             'precioMax' => $datos['precioMax'] ?? null,
-            'adminId' => $datos['idAdministrador_crear'] ?? null,
+            'tipoProducto' => $datos['Tipo_Producto'] ?? null,
+            'adminId' => $datos['ID_Administrador'] ?? null,
             'stock' => $datos['stock'] ?? null,
         ]);
 
