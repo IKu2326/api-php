@@ -11,6 +11,13 @@ class controladorAdministrador {
         echo json_encode($Administradors);
     }
 
+    public static function consultarConUsuario() {
+        $Administrador = new Administrador();
+        $Administradors = $Administrador->obtenerTodosConUsuario();
+        
+        echo json_encode($Administradors);
+    }
+
     public static function consultar_Id() {
         
         $id1 = $_GET['id1'] ?? null;

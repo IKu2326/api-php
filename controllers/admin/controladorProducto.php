@@ -13,9 +13,9 @@ class controladorProducto {
 
     public static function consultar_Id() {
         
-        $id1 = $_GET['id1'] ?? null;
+        $id1 = $_GET['id1'];
         $id2 = $_GET['id2'] ?? null;
-        $nombre1 = $_GET['nombre1'] ?? null;
+        $nombre1 = $_GET['nombre1'];
         $nombre2 = $_GET['nombre2'] ?? null;
 
 
@@ -26,7 +26,7 @@ class controladorProducto {
         }
 
         $Producto = new Producto();
-        $Productos = $Producto->obtenerPorId($id1, $id2,$nombre1, $nombre2);
+        $Productos = $Producto->obtenerPorId($id1, $nombre1,$id2, $nombre2);
         
         echo json_encode($Productos);
     }

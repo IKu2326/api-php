@@ -27,6 +27,10 @@ require_once './controllers/admin/controladorTipoDoc.php';
 require_once './controllers/admin/controladorPlataforma.php';
 require_once './controllers/admin/controladorJuego.php';
 require_once './controllers/admin/controladorConsola.php';
+require_once './controllers/admin/controladorMarca.php';
+require_once './controllers/admin/controladorAuxMarca.php';
+require_once './controllers/admin/controladorAuxPlataforma.php';
+require_once './controllers/admin/controladorAuxGenero.php';
 
 
 $ruta = trim($_GET['ruta'] ?? '');
@@ -161,6 +165,9 @@ switch ($ruta) {
     case 'Consultar_Administrador':
         controladorAdministrador::consultar();
         break;
+    case 'Consultar_AdministradorConUsuario':
+        controladorAdministrador::consultarConUsuario();
+        break;
     case 'ConsultarPorID_Administrador':
         controladorAdministrador::consultar_Id();
         break;
@@ -256,6 +263,39 @@ switch ($ruta) {
         break;
     case 'ConsultarPorId_Imagenes':
         ControladorImagenes::consultarPorId();
+        break;
+    case 'Consultar_Marca':
+        controladorMarca::consultar();
+        break;
+    case 'ConsultarPorID_Marca':
+        controladorMarca::consultar_Id();
+        break;
+    case 'Consultar_AuxPlataforma':
+        controladorAuxiliarPlataforma::consultar();
+        break;
+    case 'ConsultarPorID_AuxPlataforma':
+        controladorAuxiliarPlataforma::consultar_Id();
+        break;
+    case 'Eliminar_AuxPlataforma':
+        controladorAuxiliarPlataforma::eliminar();
+        break;
+    case 'Consultar_AuxGenero':
+        controladorAuxiliarGenero::consultar();
+        break;
+    case 'ConsultarPorID_AuxGenero':
+        controladorAuxiliarGenero::consultar_Id();
+        break;
+    case 'Eliminar_AuxGenero':
+        controladorAuxiliarGenero::eliminar();
+        break;
+    case 'Consultar_AuxMarca':
+        controladorAuxiliarMarca::consultar();
+        break;
+    case 'ConsultarPorID_AuxMarca':
+        controladorAuxiliarMarca::consultar_Id();
+        break;
+    case 'Eliminar_AuxMarca':
+        controladorAuxiliarMarca::eliminar();
         break;
     default:
         echo json_encode(["mensaje" => "Ruta no encontrada.", "ruta_solicitada" => $ruta]);
