@@ -10,9 +10,11 @@ class Usuario
         $this->conn = Database::conectar();
     }
 
-    public function registrar($nombre, $segundoNombre, $apellido, $segundoApellido, $correo, $celular, $contrasena)
+    public function registrar($nombre, $segundoNombre, $apellido, $segundoApellido, $correo, $celular, $contrasena, $direccion, $complemento)
     {
         $clave_hash = password_hash($contrasena, PASSWORD_DEFAULT);
+
+        $correo = trim(strtolower($correo));
 
         $sqlVerificar = "SELECT COUNT(*) FROM usuario WHERE correoUsuario = :correo";
         $stmt = $this->conn->prepare($sqlVerificar);
@@ -30,7 +32,7 @@ class Usuario
         :correoUsuario, :celularUsuario, :contrasenaUsuario, :idRol)";
         $stmt = $this->conn->prepare($sql);
 
-        return $stmt->execute([
+        $stmt->execute([
             ':nombreUsuario' => $nombre,
             ':senombreUsuario' => $segundoNombre,
             ':apellidoUsuario' => $apellido,
@@ -40,10 +42,22 @@ class Usuario
             ':contrasenaUsuario' => $clave_hash,
             ':idRol' => 1
         ]);
+
+         $ultimo_id = $this->conn->lastInsertId();
+
+         $sql = "INSERT INTO cliente (idCliente, direccion, complemento) 
+         VALUES (:id, :direccion, :complemento)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindParam(':id', $ultimo_id);
+        $stmt->bindParam(':direccion', $direccion);
+        $stmt->bindParam(':complemento', $complemento);
+        return $stmt->execute();
     }
 
     public function login($correo, $contrasena)
     {
+
+        $correo = trim(strtolower($correo));
         $stmt = $this->conn->prepare("SELECT * FROM usuario WHERE correoUsuario = :correo");
         $stmt->execute([':correo' => $correo]);
 
@@ -82,7 +96,7 @@ class Usuario
                 'seapellidoUsuario' => $usuario['seapellidoUsuario'],
                 'correoUsuario' => $usuario['correoUsuario'],
                 'celularUsuario' => $usuario['celularUsuario'],
-                'direccion' => $usuario['direccion'], 
+                'direccion' => $usuario['direccion'],
                 'complemento' => $usuario['complemento'] ?? null,
                 'idRol' => $usuario['idRol'],
             ];
