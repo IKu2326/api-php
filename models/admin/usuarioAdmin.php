@@ -42,7 +42,6 @@ class UsuarioAdmin extends ModeloBase
             ])
         ) {
             $ultimo_id = $conn->lastInsertId();
-            var_dump($ultimo_id);
 
             if ($idRol == 1) {
                 $sql = "INSERT INTO cliente (idCliente, direccion, complemento) 

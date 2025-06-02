@@ -2,35 +2,20 @@
 require_once './models/imagenes.php';
 class ControladorImagenes
 {
-    public static function subirImagenes()
-    {
-        if (!isset($_FILES['portada']) || $_FILES['portada']['error'] !== UPLOAD_ERR_OK) {
-            http_response_code(400);
-            echo json_encode(["mensaje" => "Faltan datos requeridos."]);
-            return;
-        }
-
-        $registro = Imagenes::subir(
-            $_FILES
-        );
-
-        if ($registro) {
-            echo json_encode(["mensaje" => " creado exitosamente."]);
-        }
-    }
-
     public static function consultar()
     {
         $nombre1 = $_GET['categoria'];
+        $nombre2 = $_GET['carpeta'];
 
-        if (!isset($nombre1)) {
+        if (!isset($nombre1, $nombre2)) {
             http_response_code(400);
             echo json_encode(['error' => 'Falta el parametro']);
             exit;
         }
 
         $registro = Imagenes::consultar(
-            $nombre1
+            $nombre1,
+            $nombre2
         );
 
         if ($registro) {
@@ -41,9 +26,11 @@ class ControladorImagenes
     public static function consultarPorId()
     {
         $nombre1 = $_GET['categoria'];
+        $nombre2 = $_GET['carpeta'];
         $id = $_GET['id'];
 
-        if (!isset($nombre1, $id)) {
+
+        if (!isset($nombre1, $id,$nombre2)) {
             http_response_code(400);
             echo json_encode(['error' => 'Faltan parametros']);
             exit;
@@ -51,6 +38,7 @@ class ControladorImagenes
 
         $registro = Imagenes::consultarPorId(
             $nombre1,
+            $nombre2,
             $id
         );
 

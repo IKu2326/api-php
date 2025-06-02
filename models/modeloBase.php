@@ -33,7 +33,7 @@ class ModeloBase {
         
     }
 
-    public function eliminar($id1, $id2, $nombre1, $nombre2) {
+    public function eliminar($id1, $id2 = null, $nombre1, $nombre2 = null) {
 
         if ($id2 === null && $nombre2 === null) {
             $stmt = $this->db->prepare("DELETE FROM {$this->tabla} WHERE $nombre1 = :id1");
