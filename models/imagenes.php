@@ -22,10 +22,10 @@ class Imagenes
         return $imagenes;
     }
 
-    public static function consultarPorId($categoria, $carpeta, $id)
+    public static function consultarPorId($categoria, $car, $id)
     {
-        $carpeta = realpath(__DIR__ . '/../assets/' . $carpeta . '/' . $categoria . '/');
-        $urlBase = 'http://localhost/api-php/assets/' . $carpeta . '/' . $categoria . '/';
+        $carpeta = realpath(__DIR__ . '/../assets/' . $car . '/' . $categoria . '/');
+        $urlBase = 'http://localhost/api-php/assets/' . $car . '/' . $categoria . '/';
 
         $visualesResult = [];
         $extensiones = ['jpg', 'jpeg', 'png', 'webp', 'jfif', 'avif'];

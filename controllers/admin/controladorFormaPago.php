@@ -26,7 +26,7 @@ class controladorFormaPago {
         }
 
         $FormaPago = new FormaPago();
-        $FormaPagos = $FormaPago->obtenerPorId($id1, $id2,$nombre1, $nombre2);
+        $FormaPagos = $FormaPago->obtenerPorId($id1, $nombre1,$id2, $nombre2);
         
         echo json_encode($FormaPagos);
     }

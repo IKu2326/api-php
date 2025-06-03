@@ -26,7 +26,7 @@ class controladorMarca {
         }
 
         $marca = new Marca();
-        $marcas = $marca->obtenerPorId($id1, $id2,$nombre1, $nombre2);
+        $marcas = $marca->obtenerPorId($id1, $nombre1,$id2, $nombre2);
         
         echo json_encode($marcas);
     }
