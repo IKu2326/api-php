@@ -256,9 +256,6 @@ switch ($ruta) {
     case 'Eliminar_Consola':
         controladorConsola::eliminar();
         break;
-    case 'Subir_Imagenes':
-        ControladorImagenes::subirImagenes();
-        break;
     case 'Consultar_ImagenesCategoria':
         ControladorImagenes::consultar();
         break;

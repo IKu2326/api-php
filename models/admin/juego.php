@@ -7,6 +7,25 @@ class Juego extends ModeloBase
         parent::__construct('juego');
     }
 
+    public static function Crear($lanzamiento, $sobre, $id) {
+
+        $conn = Database::conectar();
+        $Genero = new Genero();
+        $resultado = $Genero->obtenerPorId(id1: $id,nombre1: "idJuego");
+
+        if ($resultado){
+            return "Juego_duplicado";
+        }
+
+        $sql = "INSERT INTO juego (idJuego, anoLanzamiento, descripcionJuego) 
+        VALUES (:id, :lanzamiento, :descripcion)";
+        $stmt = $conn->prepare($sql);
+        return $stmt->execute([
+            ':id' => $id,
+            ':lanzamiento' => $lanzamiento,
+            ':descripcion' => $sobre
+        ]);
+    }
     public static function Editar($idJuego, $Lanzamiento, $Descripcion)
     {
 

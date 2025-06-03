@@ -26,7 +26,7 @@ class controladorRoles {
         }
 
         $Roles = new Roles();
-        $Roless = $Roles->obtenerPorId($id1, $id2,$nombre1, $nombre2);
+        $Roless = $Roles->obtenerPorId($id1, $nombre1,$id2, $nombre2);
         
         echo json_encode($Roless);
     }
