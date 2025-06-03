@@ -11,7 +11,7 @@ class ControladorGuardarFactura {
             return;
         }
 
-        $factura = new Factura();
+        $factura = new GuardarFactura();
         $idGenerada = $factura->guardarFacturaCompleta(
             $data['clienteId'],
             $data['subtotal'],
@@ -22,6 +22,7 @@ class ControladorGuardarFactura {
         if ($idGenerada) {
             echo json_encode(["mensaje" => "Factura guardada correctamente", "idFactura" => $idGenerada]);
         } else {
+            http_response_code(500);
             echo json_encode(["error" => "Error al guardar la factura."]);
         }
     }

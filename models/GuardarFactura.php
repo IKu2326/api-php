@@ -15,11 +15,11 @@ class GuardarFactura
     {
         try {
 
-            $fecha = date("Y-m-d H:i:s");
+            $fecha = date("Y-m-d");
 
             // 1. Insertar factura
-            $sqlFactura = "INSERT INTO factura (fechaFactura, base, totalCompra, fk_pk_Cliente) 
-                       VALUES (:fecha, :base, :total, :clienteId)";
+            $sqlFactura = "INSERT INTO factura (fechaFactura, base, totalCompra, idCliente, idFormaPago) 
+                       VALUES (:fecha, :base, :total, :clienteId, 'PSE')"; // Asumiendo forma de pago 1 (efectivo)
             $stmt = $this->conn->prepare($sqlFactura);
             $stmt->execute([
                 ":fecha" => $fecha,
@@ -60,7 +60,7 @@ class GuardarFactura
 
             return $facturaId;
         } catch (Exception $e) {
-            return false;
+            return " Error: " . $e->getMessage();
         }
     }
 
