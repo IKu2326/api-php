@@ -6,6 +6,7 @@ require_once './models/admin/auxGenero.php';
 require_once './models/admin/juego.php';
 require_once './models/admin/consola.php';
 require_once './models/imagenes.php';
+require_once './models/caracteristicasConsola.php';
 class Producto extends ModeloBase
 {
     public function __construct()
@@ -17,47 +18,39 @@ class Producto extends ModeloBase
         array $datos,
         array $imagenes
     ): bool {
-        $conn = Database::conectar();
-        $Producto = new Producto();
+        try {
+            $conn = Database::conectar();
 
-        $sql = "INSERT INTO Producto (
+            $sql = "INSERT INTO Producto (
         nombreProducto, precioProducto, garantiaProducto, idTipoProducto,
         idAdministrador_crear, stock, cantidad
     ) VALUES (
         :nombre, :precio, :garantia, :tipo, :administrador, :stock, :cantidad
     )";
+            $stmt = $conn->prepare($sql);
+            $exito = $stmt->execute([
+                ':nombre' => $datos['nombreProducto'],
+                ':precio' => $datos['precioProducto'],
+                ':garantia' => $datos['garantiaProducto'],
+                ':tipo' => $datos['idTipoProducto'],
+                ':administrador' => $datos['idAdmin'],
+                ':stock' => $datos['stock'],
+                ':cantidad' => $datos['cantidad'],
+            ]);
 
-        $stmt = $conn->prepare($sql);
-
-        $exito = $stmt->execute([
-            ':nombre' => $datos['nombreProducto'],
-            ':precio' => $datos['precioProducto'],
-            ':garantia' => $datos['garantiaProducto'],
-            ':tipo' => $datos['idTipoProducto'],
-            ':administrador' => $datos['idAdmin'],
-            ':stock' => $datos['stock'],
-            ':cantidad' => $datos['cantidad'],
-        ]);
-
-        if ($exito) {
             $ultimo_id = $conn->lastInsertId();
 
             $imagen = new Imagenes();
-            $resultadoImagen = $imagen->subir(
-                $imagenes,
-                $ultimo_id,
-                $datos['idTipoProducto'],
-                $metodo = "Agregar"
-            );
-
-            $marca = (new AuxiliarMarca())->crear($datos['marca'], $ultimo_id);
+            $imagen->subir($imagenes, $ultimo_id, $datos['idTipoProducto'], "Agregar");
 
             if ($datos['idTipoProducto'] === "Videojuego") {
+                (new Juego())->crear($datos['lanzamiento'], $datos['sobreJuego'], $ultimo_id);
                 (new AuxiliarGenero())->crear($datos['genero'], $ultimo_id);
                 (new AuxiliarPlataforma())->crear($datos['plataforma'], $ultimo_id);
-                (new Juego())->crear($datos['lanzamiento'], $datos['sobreJuego'], $ultimo_id);
+                (new AuxiliarMarca())->crear($datos['marca'], $ultimo_id);
             } else {
                 (new Consola())->crear($datos['sobre'], $ultimo_id);
+                (new AuxiliarMarca())->crear($datos['marca'], $ultimo_id);
                 (new CaracteristicasConsola())->crear(
                     $datos['fuentesAlimentacion'],
                     $datos['opcionesConectividad'],
@@ -73,20 +66,20 @@ class Producto extends ModeloBase
             }
 
             return true;
+        } catch (Throwable $e) {
+            var_dump("Error en Crear(): " . $e->getMessage());
+            return false;
         }
-
-        return false;
     }
 
     public static function Editar(
-         array $datos,
+        array $datos,
         array $imagenes
     ): bool {
         $conn = Database::conectar();
-        $Producto = new Producto();
 
         $sql = "UPDATE Producto SET nombreProducto = :nombre, precioProducto = :precio, garantiaProducto = :garantia,
-         idTipoProducto = :tipo, idAdministrador_crear = :administrador, stock = :stock, cantidad = :cantidad, 
+         idTipoProducto = :tipo, idAdministrador_crear = :administrador, stock = :stock, cantidad = :cantidad 
             WHERE idProducto = :id1";
         $stmt = $conn->prepare($sql);
 
@@ -112,7 +105,7 @@ class Producto extends ModeloBase
 
             );
 
-            $marca = (new AuxiliarMarca())->editar($datos['marca'], $datos['idProducto']);
+            (new AuxiliarMarca())->editar($datos['marca'], $datos['idProducto']);
 
             if ($datos['idTipoProducto'] === "Videojuego") {
                 (new AuxiliarGenero())->editar($datos['genero'], $datos['idProducto']);

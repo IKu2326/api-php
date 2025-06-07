@@ -19,11 +19,12 @@ class CaracteristicasConsola extends ModeloBase
         $resolucionImagen,
         $id
     ) {
+        try{
         $conn = Database::conectar();
 
         $sql = "INSERT INTO caracteristicasconsola (idConsola, color, tipoControles, controlesIncluidos,
             controlesSoporta, tipoProcesador, resolucion, fuenteAlimentacion, opcionConectividad, tipoPuertos) 
-        VALUES (:id, :color, :tipo, :controlesInc, :controlesSop, :tipoProcesador, :resolucion, fuenteAlimentacion,
+        VALUES (:id, :color, :tipo, :controlesInc, :controlesSop, :tipoProcesador, :resolucion, :fuenteAlimentacion,
         :opcionConectividad, :tipoPuertos)";
         $stmt = $conn->prepare($sql);
         return $stmt->execute([
@@ -36,9 +37,12 @@ class CaracteristicasConsola extends ModeloBase
             ':resolucion' => $resolucionImagen,
             ':fuenteAlimentacion' => $fuentes,
             ':opcionConectividad' => $conectividad,
-            ':tipoPuertos' => $tiposPuertos,
+            ':tipoPuertos' => $tiposPuertos
         ]);
-
+        } catch (Throwable $e) {
+            var_dump("Error en Crear(Carac): " . $e->getMessage());
+            return false;
+        }
     }
 
     public static function Editar(
