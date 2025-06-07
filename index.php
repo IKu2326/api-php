@@ -32,6 +32,7 @@ require_once './controllers/admin/controladorMarca.php';
 require_once './controllers/admin/controladorAuxMarca.php';
 require_once './controllers/admin/controladorAuxPlataforma.php';
 require_once './controllers/admin/controladorAuxGenero.php';
+require_once './controllers/admin/controladorCaracteristicasConsola.php';
 
 
 $ruta = trim($_GET['ruta'] ?? '');
@@ -294,6 +295,15 @@ switch ($ruta) {
         break;
     case 'Eliminar_AuxMarca':
         controladorAuxiliarMarca::eliminar();
+        break;
+    case 'Consultar_CaracteristicasConsola':
+        controladorCaracteristicasConsola::consultar();
+        break;
+    case 'ConsultarPorID_CaracteristicasConsola':
+        controladorCaracteristicasConsola::consultar_Id();
+        break;
+    case 'Eliminar_CaracteristicasConsola':
+        controladorCaracteristicasConsola::eliminar();
         break;
 
    case 'cotizar-envio':

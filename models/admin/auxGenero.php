@@ -46,11 +46,12 @@ class AuxiliarGenero extends ModeloBase
 
         $conn = Database::conectar();
         $Aux_Genero = new AuxiliarGenero();
-        $Eliminar = $Aux_Genero->eliminar(id1: $id, nombre1: "fk_pk_producto");
+        $Eliminar = $Aux_Genero->eliminar(id1: $id, nombre1: "fk_pk_juego");
 
         if ($Eliminar == true) {
             if (is_string($Genero)) {
-                $sql = "UPDATE aux_genero SET fk_pk_juego = :id, fk_pk_genero = :Genero";
+                $sql = "INSERT INTO aux_genero (fk_pk_juego, fk_pk_genero) 
+                VALUES (:id, :Genero)";
                 $stmt = $conn->prepare($sql);
                 $stmt->execute([
                     ':id' => $id,
@@ -58,8 +59,7 @@ class AuxiliarGenero extends ModeloBase
                 ]);
                 return true;
             } else {
-
-                $sql = "INSERT INTO aux_Genero (fk_pk_producto, fk_pk_Genero) 
+                $sql = "INSERT INTO aux_genero (fk_pk_juego, fk_pk_genero) 
                 VALUES (:id, :Genero)";
                 $stmt = $conn->prepare($sql);
 

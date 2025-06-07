@@ -8,10 +8,10 @@ class Consola extends ModeloBase
     }
 
     public static function Crear($sobre, $id) {
-
+        try {
         $conn = Database::conectar();
-        $Genero = new Genero();
-        $resultado = $Genero->obtenerPorId(id1: $id,nombre1: "idConsola");
+        $Consola = new Consola();
+        $resultado = $Consola->obtenerPorId(id1: $id,nombre1: "idConsola");
 
         if ($resultado){
             return "Consola_duplicado";
@@ -24,6 +24,10 @@ class Consola extends ModeloBase
             ':id' => $id,
             ':descripcion' => $sobre
         ]);
+        } catch (Throwable $e) {
+            var_dump("Error en Crear(Consola): " . $e->getMessage());
+            return false;
+        }
     }
 
     public static function Editar($idConsola, $sobre)

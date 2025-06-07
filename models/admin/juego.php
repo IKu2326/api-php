@@ -10,8 +10,8 @@ class Juego extends ModeloBase
     public static function Crear($lanzamiento, $sobre, $id) {
 
         $conn = Database::conectar();
-        $Genero = new Genero();
-        $resultado = $Genero->obtenerPorId(id1: $id,nombre1: "idJuego");
+        $Juego = new Juego();
+        $resultado = $Juego->obtenerPorId(id1: $id,nombre1: "idJuego");
 
         if ($resultado){
             return "Juego_duplicado";

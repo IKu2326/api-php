@@ -5,7 +5,7 @@ class Imagenes
     public static function consultar($nombreCategoria, $carpeta)
     {
         $carpeta = realpath(__DIR__ . '/../assets/' . $carpeta . '/' . $nombreCategoria . '/');
-        $urlBase = 'http://localhost/api-php/assets/' . $carpeta . '/' . $nombreCategoria . '/';
+        $urlBase = 'http://localhost:8081/api-php/assets/' . $carpeta . '/' . $nombreCategoria . '/';
         $extensiones = ['jpg', 'jpeg', 'png', 'webp', 'jfif', 'avif'];
 
         $imagenes = [];
@@ -25,7 +25,7 @@ class Imagenes
     public static function consultarPorId($categoria, $car, $id)
     {
         $carpeta = realpath(__DIR__ . '/../assets/' . $car . '/' . $categoria . '/');
-        $urlBase = 'http://localhost/api-php/assets/' . $car . '/' . $categoria . '/';
+        $urlBase = 'http://localhost:8081/api-php/assets/' . $car . '/' . $categoria . '/';
 
         $visualesResult = [];
         $extensiones = ['jpg', 'jpeg', 'png', 'webp', 'jfif', 'avif'];
@@ -42,7 +42,7 @@ class Imagenes
                 }
             }
             return $visualesResult;
-        } else if ($categoria === "trailer"){
+        } else if ($categoria === "trailer") {
             $extensionesT = ['mp4', 'avi', 'mov', 'wmv', 'mkv'];
             foreach ($extensionesT as $ext) {
                 $archivo = $carpeta . '/' . $id . '.' . $ext;
@@ -67,56 +67,45 @@ class Imagenes
         $permitidos = [".jpg", ".jpeg", ".png", ".webp", ".jfif", ".avif"];
         $permitidosTrailer = ['mp4', 'avi', 'mov', 'wmv', 'mkv'];
 
-        $nombresCampos = ['portada', 'visuales', 'trailer', 'banner'];
+        $nombresCampos = ['portada', 'visual1', 'visual2', 'visual3', 'trailer', 'banner'];
 
-        $dirTemporal = realpath(__DIR__ . '/../assets/' . ($tipo === "Videojuegos" ? 'Videojuegos/' : 'Consolas/'));
+        $dirTemporal = 'c:\\xamppNuevo\\htdocs\\api-php\\assets/' . ($tipo === "Videojuego" ? 'Videojuego/' : 'Consola/');
 
         $todoBien = true;
 
         foreach ($nombresCampos as $campo) {
-            if (empty($archivos[$campo])) {
+            if (empty($archivos[$campo]) || !isset($archivos[$campo])) {
                 continue;
             }
 
-            if($metodo === "Editar"){
-                $buscarImagenes = Imagenes::consultarPorId($tipo, $campo, $id);
-
-            if (!$buscarImagenes || !isset($buscarImagenes['name'])) {
-                continue;
-            }
-            }
-            
-            if ($campo === 'visuales' && is_array($archivos[$campo]['name'])) {
+            if ($campo === 'visual1' || $campo === 'visual2' || $campo === 'visual3') {
                 $dir = $dirTemporal . '/visuales';
 
-                foreach ($archivos[$campo]['name'] as $index => $nombreOriginal) {
-                    if ($archivos[$campo]['error'][$index] !== UPLOAD_ERR_OK) {
-                        $todoBien = false;
-                        continue;
-                    }
-
-                    if($metodo === "Editar"){
-
-                    if (strtolower($archivos[$campo]['name'][$index]) === strtolower($buscarImagenes['name'][$index])) {
-                        continue;
-                    }
-
-                    if (file_exists($dir . '/' . $buscarImagenes['name'][$index])) {
-                        unlink($dir . '/' . $buscarImagenes['name'][$index]);
-                    }}
-                    
-                    $extension = '.' . strtolower(pathinfo($nombreOriginal, PATHINFO_EXTENSION));
-                    if (!in_array($extension, $permitidos)) {
-                        $todoBien = false;
-                        continue;
-                    }
-
-                    $tmpName = $archivos[$campo]['tmp_name'][$index];
-                    $nombreArchivo = "visual{$index}_{$id}{$extension}";
-                    $rutaDestino = $dir . '/' . $nombreArchivo;
-
-                    move_uploaded_file($tmpName, $rutaDestino);
+                if ($archivos[$campo]['error'] !== UPLOAD_ERR_OK) {
+                    $todoBien = false;
+                    continue;
                 }
+
+                if ($metodo === "Editar") {
+                    foreach($permitidos as $ext){
+                        if (file_exists($dir . '/' . $campo . '_' . $id . $ext)) {
+                        unlink($dir . '/' . $campo . '_' . $id . $ext);
+                    }
+                    }
+                }
+
+                $extension = '.' . strtolower(pathinfo($archivos[$campo]['name'], PATHINFO_EXTENSION));
+                if (!in_array($extension, $permitidos)) {
+                    $todoBien = false;
+                    continue;
+                }
+
+                $tmpName = $archivos[$campo]['tmp_name'];
+                $nombreArchivo = "{$campo}_{$id}{$extension}";
+                $rutaDestino = $dir . '/' . $nombreArchivo;
+
+                move_uploaded_file($tmpName, $rutaDestino);
+
             } elseif ($campo === 'trailer') {
                 $dir = $dirTemporal . '/trailer';
 
@@ -125,14 +114,12 @@ class Imagenes
                     continue;
                 }
 
-                if($metodo === "Editar"){
-                    if ($archivos[$campo]['name'] === $buscarImagenes['name']) {
-                    continue;
-                }
-
-                if (file_exists($dir . '/' . $buscarImagenes['name'])) {
-                    unlink($dir . '/' . $buscarImagenes['name']);
-                }
+                if ($metodo === "Editar") {
+                    foreach($permitidosTrailer as $ext){
+                        if (file_exists($dir . '/' . $id . $ext)) {
+                        unlink($dir . '/' . $id . $ext);
+                    }
+                    }
                 }
 
                 $extension = strtolower(pathinfo($archivos[$campo]['name'], PATHINFO_EXTENSION));
@@ -154,15 +141,15 @@ class Imagenes
 
                 $dir = $dirTemporal . '/' . $campo;
 
-                if($metodo === "Editar"){
-                    if ($archivos[$campo]['name'] === $buscarImagenes['name']) {
-                    continue;
+                if ($metodo === "Editar") {
+                    foreach($permitidos as $ext){
+                        if (file_exists($dir . '/' . $id . $ext)) {
+                        unlink($dir . '/' . $id . $ext);
+                    }
+                    }
                 }
 
-                if (file_exists($dir . '/' . $buscarImagenes['name'])) {
-                    unlink($dir . '/' . $buscarImagenes['name']);
-                }
-                }
+                $dir = $dirTemporal.'/'.$campo;
 
                 $extension = '.' . strtolower(pathinfo($archivos[$campo]['name'], PATHINFO_EXTENSION));
                 if (!in_array($extension, $permitidos)) {
@@ -173,7 +160,7 @@ class Imagenes
                 $tmpName = $archivos[$campo]['tmp_name'];
                 $nombreArchivo = $id . $extension;
                 $rutaDestino = $dir . '/' . $nombreArchivo;
-
+                
                 move_uploaded_file($tmpName, $rutaDestino);
             }
         }
