@@ -11,7 +11,7 @@ class ControladorSoporte {
         if ($idCliente && $fecha && $pqrs) {
             $soporte = new Soporte();
             $resultado = $soporte->enviarPQRS($idCliente, $fecha, $pqrs);
-            echo json_encode(['success' => $resultado]);
+            echo json_encode($resultado);
         } else {
             echo json_encode(['success' => false, 'message' => 'Datos incompletos']);
         }

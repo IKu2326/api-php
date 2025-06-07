@@ -296,7 +296,7 @@ switch ($ruta) {
         controladorAuxiliarMarca::eliminar();
         break;
 
-   case 'cotizar-envio':
+    case 'cotizar-envio':
         EnviosController::cotizar();
         break;
     default:
