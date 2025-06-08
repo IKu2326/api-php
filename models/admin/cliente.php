@@ -5,6 +5,14 @@ class Cliente extends ModeloBase {
         parent::__construct('cliente'); 
     }
 
+        public function obtenerTodosConUsuario()
+    {
+        $stmt = $this->db->query("SELECT c.*, u.nombreUsuario, u.apellidoUsuario 
+        FROM cliente c 
+        JOIN usuario u
+        WHERE c.idCliente = u.idUsuario");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 
     public static function Editar($idCliente, $direccion, $complemento) {
 

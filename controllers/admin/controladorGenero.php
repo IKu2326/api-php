@@ -108,4 +108,18 @@ class controladorGenero
             echo json_encode(["mensaje" => "Error al eliminar el Genero."]);
         }
     }
+
+    public static function filtroGenero()
+    {
+        $datos = $_GET;
+
+        $Genero = new Genero();
+
+        $resultados = $Genero->filtrarGenero([
+            'nombreGenero' => $datos['nombreGenero'] ?? null,
+            'stock' => $datos['stock'] ?? null
+        ]);
+
+        echo json_encode($resultados);
+    }
 }

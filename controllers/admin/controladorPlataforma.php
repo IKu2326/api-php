@@ -109,4 +109,18 @@ class controladorPlataforma
             echo json_encode(["mensaje" => "Error al eliminar el Plataforma."]);
         }
     }
+
+    public static function filtroPlataforma()
+    {
+        $datos = $_GET;
+
+        $Plataforma = new Plataforma();
+
+        $resultados = $Plataforma->filtrarPlataforma([
+            'nombrePlataforma' => $datos['nombrePlataforma'] ?? null,
+            'stock' => $datos['stock'] ?? null
+        ]);
+
+        echo json_encode($resultados);
+    }
 }

@@ -113,6 +113,9 @@ switch ($ruta) {
     case 'Consultar_Cliente':
         controladorCliente::consultar();
         break;
+    case 'Consultar_ClienteConUsuario':
+        controladorCliente::consultarConUsuario();
+        break;
     case 'ConsultarPorID_Cliente':
         controladorCliente::consultar_Id();
         break;
@@ -139,6 +142,9 @@ switch ($ruta) {
         break;
     case 'ConsultarPorID_Factura':
         controladorFactura::consultar_Id();
+        break;
+    case 'Consultar_FacturasFiltrados':
+        controladorFactura::filtroFactura();
         break;
     case 'Crear_Factura':
         controladorFactura::crear();
@@ -194,6 +200,9 @@ switch ($ruta) {
     case 'ConsultarPorID_DetalleFactura':
         controladorDetallesFactura::consultar_Id();
         break;
+    case 'Consultar_DetallesFacturaFiltrados':
+        controladorDetallesFactura::filtroDetallesFactura();
+        break;
     case 'Crear_DetalleFactura':
         controladorDetallesFactura::crear();
         break;
@@ -209,6 +218,9 @@ switch ($ruta) {
     case 'ConsultarPorID_Genero':
         controladorGenero::consultar_Id();
         break;
+    case 'Consultar_GeneroFiltrados':
+        controladorGenero::filtroGenero();
+        break;
     case 'Crear_Genero':
         controladorGenero::crear();
         break;
@@ -223,6 +235,9 @@ switch ($ruta) {
         break;
     case 'ConsultarPorID_Plataforma':
         controladorPlataforma::consultar_Id();
+        break;
+    case 'Consultar_PlataformaFiltrados':
+        controladorPlataforma::filtroPlataforma();
         break;
     case 'Crear_Plataforma':
         controladorPlataforma::crear();

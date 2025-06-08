@@ -5,8 +5,9 @@ require_once './models/admin/auxPlataforma.php';
 require_once './models/admin/auxGenero.php';
 require_once './models/admin/juego.php';
 require_once './models/admin/consola.php';
+require_once './models/admin/caracteristicasConsola.php';
 require_once './models/imagenes.php';
-require_once './models/caracteristicasConsola.php';
+
 class Producto extends ModeloBase
 {
     public function __construct()
@@ -76,6 +77,7 @@ class Producto extends ModeloBase
         array $datos,
         array $imagenes
     ): bool {
+
         $conn = Database::conectar();
 
         $sql = "UPDATE Producto SET nombreProducto = :nombre, precioProducto = :precio, garantiaProducto = :garantia,
@@ -108,11 +110,13 @@ class Producto extends ModeloBase
             (new AuxiliarMarca())->editar($datos['marca'], $datos['idProducto']);
 
             if ($datos['idTipoProducto'] === "Videojuego") {
+                (new Juego())->Editar($datos['idProducto'], $datos['lanzamiento'], $datos['sobreJuego']);
                 (new AuxiliarGenero())->editar($datos['genero'], $datos['idProducto']);
                 (new AuxiliarPlataforma())->editar($datos['plataforma'], $datos['idProducto']);
-                (new Juego())->crear($datos['lanzamiento'], $datos['sobreJuego'], $datos['idProducto']);
+                (new AuxiliarMarca())->editar($datos['marca'], $datos['idProducto']);
             } else {
-                (new Consola())->editar($datos['sobre'], $datos['idProducto']);
+                (new Consola())->Editar($datos['idProducto'], $datos['sobre']);
+                (new AuxiliarMarca())->editar($datos['marca'], $datos['idProducto']);
                 (new CaracteristicasConsola())->editar(
                     $datos['fuentesAlimentacion'],
                     $datos['opcionesConectividad'],

@@ -38,4 +38,27 @@ class Genero extends ModeloBase {
         ]);
     }
 
+        public function filtrarGenero($filtros = [])
+    {
+        $conn = Database::conectar();
+
+        $sql = "SELECT * FROM generojuego WHERE 1=1";
+        $params = [];
+
+        if (!empty($filtros['nombreGenero'])) {
+            $sql .= " AND idGeneroJuego LIKE :nombre";
+            $params[':nombre'] = '%' . $filtros['nombreGenero'] . '%';
+        }
+
+        if (!empty($filtros['stock'])) {
+            $stock = ($filtros['stock'] === "Activo") ? 1 : 0;
+            $sql .= " AND estadoGeneroJuego = :stock";
+            $params[':stock'] = $stock;
+        }
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

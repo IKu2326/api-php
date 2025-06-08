@@ -11,6 +11,13 @@ class controladorCliente {
         echo json_encode($Clientes);
     }
 
+    public static function consultarConUsuario() {
+        $Cliente = new Cliente();
+        $Clientes = $Cliente->obtenerTodosConUsuario();
+        
+        echo json_encode($Clientes);
+    }
+
     public static function consultar_Id() {
         
         $id1 = $_GET['id1'] ?? null;

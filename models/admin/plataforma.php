@@ -1,17 +1,20 @@
 <?php
 require_once './models/modeloBase.php';
-class Plataforma extends ModeloBase {
-    public function __construct() {
-        parent::__construct('plataforma'); 
+class Plataforma extends ModeloBase
+{
+    public function __construct()
+    {
+        parent::__construct('plataforma');
     }
 
-    public static function Crear($id, $estado) {
+    public static function Crear($id, $estado)
+    {
 
         $conn = Database::conectar();
         $Plataforma = new Plataforma();
-        $resultado = $Plataforma->obtenerPorId(id1: $id,nombre1: "idPlataforma");
+        $resultado = $Plataforma->obtenerPorId(id1: $id, nombre1: "idPlataforma");
 
-        if ($resultado){
+        if ($resultado) {
             return "Plataforma_duplicada";
         }
 
@@ -24,7 +27,8 @@ class Plataforma extends ModeloBase {
         ]);
     }
 
-    public static function Editar($idA, $id, $estado) {
+    public static function Editar($idA, $id, $estado)
+    {
 
         $conn = Database::conectar();
 
@@ -36,6 +40,31 @@ class Plataforma extends ModeloBase {
             'id' => $id,
             'estado' => $estado
         ]);
+    }
+
+    public function filtrarPlataforma($filtros = [])
+    {
+        $conn = Database::conectar();
+
+        $sql = "SELECT * FROM plataforma WHERE 1=1";
+        $params = [];
+
+        // Filtrar por nombreProducto con LIKE si existe
+        if (!empty($filtros['nombrePlataforma'])) {
+            $sql .= " AND idPlataforma LIKE :nombre";
+            $params[':nombre'] = '%' . $filtros['nombrePlataforma'] . '%';
+        }
+
+        // Filtrar por tipoProducto si existe
+        if (!empty($filtros['stock'])) {
+            $stock = ($filtros['stock'] === "Activo") ? 1 : 0;
+            $sql .= " AND estadoPlataforma = :stock";
+            $params[':stock'] = $stock;
+        }
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }

@@ -116,4 +116,22 @@ class controladorDetallesFactura {
             echo json_encode(["mensaje" => "Error al eliminar la DetallesFactura."]);
         }
     }
+
+    public static function filtroDetallesFactura()
+    {
+        $datos = $_GET; 
+
+        $Detalles = new DetalleFactura();
+
+        $resultados = $Detalles->filtrarDetalleFactura([
+            'idFactura' => $datos['idFactura'] ?? null,
+            'idProducto' => $datos['idProducto'] ?? null,
+            'valorUni_Minimo' => $datos['valorUni_Minimo'] ?? null,
+            'valorUni_Maximo' => $datos['valorUni_Maximo'] ?? null,
+            'totalMinimo' => $datos['totalMinimo'] ?? null,
+            'totalMaximo' => $datos['totalMaximo'] ?? null,
+        ]);
+
+        echo json_encode($resultados);
+    }
 }

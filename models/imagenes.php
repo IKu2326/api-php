@@ -1,11 +1,12 @@
 <?php
 
+require_once './models/admin/Producto.php';
 class Imagenes
 {
     public static function consultar($nombreCategoria, $carpeta)
     {
         $carpeta = realpath(__DIR__ . '/../assets/' . $carpeta . '/' . $nombreCategoria . '/');
-        $urlBase = 'http://localhost:8081/api-php/assets/' . $carpeta . '/' . $nombreCategoria . '/';
+        $urlBase = 'http://localhost/api-php/assets/' . $carpeta . '/' . $nombreCategoria . '/';
         $extensiones = ['jpg', 'jpeg', 'png', 'webp', 'jfif', 'avif'];
 
         $imagenes = [];
@@ -25,7 +26,7 @@ class Imagenes
     public static function consultarPorId($categoria, $car, $id)
     {
         $carpeta = realpath(__DIR__ . '/../assets/' . $car . '/' . $categoria . '/');
-        $urlBase = 'http://localhost:8081/api-php/assets/' . $car . '/' . $categoria . '/';
+        $urlBase = 'http://localhost/api-php/assets/' . $car . '/' . $categoria . '/';
 
         $visualesResult = [];
         $extensiones = ['jpg', 'jpeg', 'png', 'webp', 'jfif', 'avif'];
@@ -69,7 +70,7 @@ class Imagenes
 
         $nombresCampos = ['portada', 'visual1', 'visual2', 'visual3', 'trailer', 'banner'];
 
-        $dirTemporal = 'c:\\xamppNuevo\\htdocs\\api-php\\assets/' . ($tipo === "Videojuego" ? 'Videojuego/' : 'Consola/');
+        $dirTemporal = 'c:\\xampp\\htdocs\\api-php\\assets/' . ($tipo === "Videojuego" ? 'Videojuego/' : 'Consola/');
 
         $todoBien = true;
 
@@ -167,4 +168,48 @@ class Imagenes
 
         return $todoBien;
     }
+
+    public static function eliminar($id): bool{
+        $permitidos = [".jpg", ".jpeg", ".png", ".webp", ".jfif", ".avif"];
+        $permitidosTrailer = ['mp4', 'avi', 'mov', 'wmv', 'mkv'];
+
+        $nombresCampos = ['portada', 'visual1', 'visual2', 'visual3', 'trailer', 'banner'];
+
+        $Producto = (new Producto())->obtenerPorId($id, nombre1: "idProducto");
+        $tipo = $Producto['idTipoProducto'];
+
+        $dirTemporal = 'c:\\xampp\\htdocs\\api-php\\assets/' . ($tipo === "Videojuego" ? 'Videojuego/' : 'Consola/');
+
+        $todoBien = true;
+
+        foreach ($nombresCampos as $campo) {
+            if ($campo === 'visual1' || $campo === 'visual2' || $campo === 'visual3') {
+                $dir = $dirTemporal . '/visuales';
+                foreach($permitidos as $ext){
+                        if (file_exists($dir . '/' . $campo . '_' . $id . $ext)) {
+                        unlink($dir . '/' . $campo . '_' . $id . $ext);
+                    }
+                }
+            }else if($campo === 'trailer'){
+                $dir = $dirTemporal . '/trailer';
+                foreach($permitidosTrailer as $ext){
+                        if (file_exists($dir . '/' .$id . $ext)) {
+                        unlink($dir . '/'. $id . $ext);
+                    }else {
+                        continue;
+                    }
+                }
+            }else {
+                $dir = $dirTemporal . '/'.$campo;
+                foreach($permitidos as $ext){
+                        if (file_exists($dir . '/'. $id . $ext)) {
+                        unlink($dir . '/'. $id . $ext);
+                    }else {
+                        continue;
+                    }
+                }
+            }
+        }
+        return $todoBien;
+    }   
 }

@@ -1,8 +1,13 @@
 <?php
 
-require_once './models/admin/Producto.php';
+require_once './models/admin/auxMarca.php';
+require_once './models/admin/auxPlataforma.php';
+require_once './models/admin/auxGenero.php';
 require_once './models/admin/juego.php';
 require_once './models/admin/consola.php';
+require_once './models/admin/caracteristicasConsola.php';
+require_once './models/imagenes.php';
+require_once './models/admin/Producto.php';
 
 class controladorProducto
 {
@@ -72,7 +77,9 @@ class controladorProducto
             $faltantes = [];
 
             foreach ($camposRequeridos as $campo => $valor) {
-                if (empty($valor)) {
+                if (!isset($valor) && $valor !== 0) {
+                    $faltantes[] = $campo;
+                } elseif ($campo !== 'stock' && empty($valor)) {
                     $faltantes[] = $campo;
                 }
             }
@@ -115,7 +122,9 @@ class controladorProducto
             $faltantes = [];
 
             foreach ($camposRequeridos as $campo => $valor) {
-                if (empty($valor)) {
+                if (!isset($valor) && $valor !== 0) {
+                    $faltantes[] = $campo;
+                } elseif ($campo !== 'stock' && empty($valor)) {
                     $faltantes[] = $campo;
                 }
             }
@@ -178,7 +187,9 @@ class controladorProducto
             $faltantes = [];
 
             foreach ($camposRequeridos as $campo => $valor) {
-                if (empty($valor)) {
+                if (!isset($valor) && $valor !== 0) {
+                    $faltantes[] = $campo;
+                } elseif ($campo !== 'stock' && empty($valor)) {
                     $faltantes[] = $campo;
                 }
             }
@@ -244,11 +255,17 @@ class controladorProducto
         $nombre2 = $datos['nombre2'] ?? null;
 
 
-        (new Juego())->eliminar($datos['id1'], $id2, nombre1: "idJuego");
-        (new Consola())->eliminar($datos['id1'], $id2, nombre1: "idConsola");
+
+        (new Imagenes())->eliminar($datos['id1']);
+        (new AuxiliarMarca())->eliminar($datos['id1'], nombre1: "fk_pk_producto");
+        (new AuxiliarGenero())->eliminar($datos['id1'], nombre1: "fk_pk_juego");
+        (new AuxiliarPlataforma())->eliminar($datos['id1'], nombre1: "idJuego");
+
+        (new Juego())->eliminar($datos['id1'], nombre1: "idJuego");
+        (new Consola())->eliminar($datos['id1'], nombre1: "idConsola");
 
         $Producto = new Producto();
-        $resultado = $Producto->eliminar($datos['id1'], $id2, $datos['nombre1'], $nombre2);
+        $resultado = $Producto->eliminar($datos['id1'], $datos['nombre1']);
 
         if ($resultado) {
             echo json_encode(["mensaje" => " eliminado"]);

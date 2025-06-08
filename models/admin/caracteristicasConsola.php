@@ -62,7 +62,7 @@ class CaracteristicasConsola extends ModeloBase
 
         $sql = "UPDATE caracteristicasconsola 
                 SET color = :color,
-                    tipoControles = :tipo,
+                    tipoControles = :tipoControles,
                     controlesIncluidos = :controlesInc,
                     controlesSoporta = :controlesSop,
                     tipoProcesador = :tipoProcesador,
@@ -82,7 +82,7 @@ class CaracteristicasConsola extends ModeloBase
             ':fuenteAlimentacion' => $fuentes,
             ':opcionConectividad' => $conectividad,
             ':tipoPuertos' => $tiposPuertos,
-            ':id' => $id,
+            ':id' => $id    
         ]);
     }
 

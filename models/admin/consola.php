@@ -32,15 +32,19 @@ class Consola extends ModeloBase
 
     public static function Editar($idConsola, $sobre)
     {
-
+        try {
         $conn = Database::conectar();
 
         $sql = "UPDATE consola SET sobreConsola = :sobreConsola
             WHERE idConsola = :id1";
         $stmt = $conn->prepare($sql);
         return $stmt->execute([
-            'id1' => $idConsola,
-            'sobreConsola' => $sobre,
+            ':id1' => $idConsola,
+            ':sobreConsola' => $sobre,
         ]);
+        } catch (Throwable $e) {
+            var_dump("Error en Editar(Consola): " . $e->getMessage());
+            return false;
+        }
     }
 }
