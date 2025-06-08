@@ -7,7 +7,7 @@ require_once './models/admin/juego.php';
 require_once './models/admin/consola.php';
 require_once './models/admin/caracteristicasConsola.php';
 require_once './models/imagenes.php';
-
+require_once './models/admin/caracteristicasConsola.php';
 class Producto extends ModeloBase
 {
     public function __construct()
