@@ -22,6 +22,7 @@ class ObtenerProductosPorIds {
                     p.precioProducto,
                     p.totalProducto,
                     p.stock,
+                    P.idTipoProducto,
                     IF(j.idJuego IS NOT NULL, 'videojuego', 'consola') AS tipoProducto,
                     GROUP_CONCAT(DISTINCT apl.idPlataforma SEPARATOR ', ') AS plataformas
                 FROM producto p
