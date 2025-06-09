@@ -72,10 +72,10 @@ class controladorSoporteAdmin {
         );
 
         if ($registro === true) {
-            echo json_encode(["mensaje" => " Editado exitosamente."]);
+            echo json_encode(["mensaje" => " Respondido exitosamente."]);
         } else {
             http_response_code(500); 
-            echo json_encode(["mensaje" => "Error al Editar el Soporte."]);
+            echo json_encode(["mensaje" => "Error al responder el Soporte."]);
         }
     }
     public static function eliminar() {

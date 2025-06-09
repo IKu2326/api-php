@@ -154,4 +154,13 @@ class controladorEnvioAdmin
 
         echo json_encode($resultados);
     }
+
+    public static function consultarDetalles() {
+        $datos = json_decode(file_get_contents("php://input"), true);;
+
+        $Envio = new EnvioAdmin();
+        $Envios = $Envio->obtenerDetallesEnvio($datos['idFactura']);
+        
+        echo json_encode($Envios);
+    }
 }

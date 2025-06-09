@@ -221,6 +221,13 @@ class ControladorUsuarioAdmin
         $id2 = $datos['id2'] ?? null;
         $nombre2 = $datos['nombre2'] ?? null;
 
+        $conn = Database::conectar();
+        $stmt1 = $conn->prepare("UPDATE producto SET idAdministrador_crear = :nuevo WHERE idAdministrador_crear = :actual");
+        $stmt1->execute([
+            ':nuevo' => 10,
+            ':actual' => $datos['id1']
+        ]);
+
         $Cliente = new Cliente();
         $ResultadoC = $Cliente->eliminar($datos['id1'], "idCliente", $id2, $nombre2);
 

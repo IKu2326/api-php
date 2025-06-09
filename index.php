@@ -365,6 +365,9 @@ switch ($ruta) {
     case 'Consultar_EnvioAdminFiltrados':
         controladorEnvioAdmin::filtroEnvioAdmin();
         break;
+    case 'Consultar_EnvioAdminDetalles':
+        controladorEnvioAdmin::consultarDetalles();
+        break;
     case 'Crear_EnvioAdmin':
         controladorEnvioAdmin::crear();
         break;
