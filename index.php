@@ -33,6 +33,7 @@ require_once './controllers/admin/controladorAuxMarca.php';
 require_once './controllers/admin/controladorAuxPlataforma.php';
 require_once './controllers/admin/controladorAuxGenero.php';
 require_once './controllers/admin/controladorCaracteristicasConsola.php';
+require_once './controllers/admin/controladorSoporte.php';
 
 
 $ruta = trim($_GET['ruta'] ?? '');
@@ -101,6 +102,9 @@ switch ($ruta) {
     case 'ConsultarPorID_CalificacionCliente':
         controladorCalificacionCliente::consultar_Id();
         break;
+    case 'Consultar_CalificacionClienteFiltrados':
+        controladorCalificacionCliente::filtroCalificacion();
+        break;
     case 'Crear_CalificacionCliente':
         controladorCalificacionCliente::crear();
         break;
@@ -160,6 +164,9 @@ switch ($ruta) {
         break;
     case 'ConsultarPorID_UsuarioAdmin':
         ControladorUsuarioAdmin::consultar_Id();
+        break;
+    case 'Consultar_UsuarioAdminFiltrados':
+        ControladorUsuarioAdmin::filtroUsuarioAdmin();
         break;
     case 'Crear_UsuarioAdmin':
         controladorUsuarioAdmin::crear();
@@ -319,6 +326,21 @@ switch ($ruta) {
         break;
     case 'Eliminar_CaracteristicasConsola':
         controladorCaracteristicasConsola::eliminar();
+        break;
+    case 'Consultar_Soporte':
+        controladorSoporteAdmin::consultar();
+        break;
+    case 'ConsultarPorID_Soporte':
+        controladorSoporteAdmin::consultar_Id();
+        break;
+    case 'Editar_Soporte':
+        controladorSoporteAdmin::editar();
+        break;
+    case 'Responder_Soporte':
+        controladorSoporteAdmin::responder();
+        break;
+    case 'Eliminar_Soporte':
+        controladorSoporteAdmin::eliminar();
         break;
 
     case 'cotizar-envio':

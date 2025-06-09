@@ -26,11 +26,12 @@ class Imagenes
     public static function consultarPorId($categoria, $car, $id)
     {
         $carpeta = realpath(__DIR__ . '/../assets/' . $car . '/' . $categoria . '/');
-        $urlBase = 'http://localhost/api-php/assets/' . $car . '/' . $categoria . '/';
+        $urlBase = 'c:\\xampp\\htdocs\\api-php\\assets/' . $car . '/' . $categoria . '/';
 
         $visualesResult = [];
         $extensiones = ['jpg', 'jpeg', 'png', 'webp', 'jfif', 'avif'];
 
+        try{
         if ($categoria == "visuales") {
             $visuales = ['visual1_', 'visual2_', 'visual3_'];
             foreach ($visuales as $visual) {
@@ -52,6 +53,7 @@ class Imagenes
                 }
             }
         } else {
+            
             foreach ($extensiones as $ext) {
                 $archivo = $carpeta . '/' . $id . '.' . $ext;
                 if (file_exists($archivo)) {
@@ -59,9 +61,10 @@ class Imagenes
                 }
             }
         }
-
-        http_response_code(404);
-        echo json_encode(["error" => "Imagen no encontrada"]);
+        } catch (Throwable $e) {
+            var_dump("Error en consultar " . $e->getMessage());
+            return false;
+        }
     }
     public static function subir($archivos, $id, $tipo, $metodo): bool
     {

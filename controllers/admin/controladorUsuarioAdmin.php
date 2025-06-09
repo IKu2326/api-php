@@ -5,30 +5,32 @@ require_once './models/admin/administrador.php';
 
 class ControladorUsuarioAdmin
 {
-    public static function consultar() {
+    public static function consultar()
+    {
         $Usuario = new UsuarioAdmin();
         $Usuarios = $Usuario->obtenerTodos();
-        
+
         echo json_encode($Usuarios);
     }
 
-    public static function consultar_Id() {
-        
+    public static function consultar_Id()
+    {
+
         $id1 = $_GET['id1'] ?? null;
         $id2 = $_GET['id2'] ?? null;
         $nombre1 = $_GET['nombre1'] ?? null;
         $nombre2 = $_GET['nombre2'] ?? null;
 
 
-        if(!isset($id1, $nombre1)) {
+        if (!isset($id1, $nombre1)) {
             http_response_code(400);
             echo json_encode(["mensaje" => "Faltan datos requeridos."]);
             return;
         }
 
         $Usuario = new UsuarioAdmin();
-        $Usuarios = $Usuario->obtenerPorId($id1, $nombre1,$id2, $nombre2);
-        
+        $Usuarios = $Usuario->obtenerPorId($id1, $nombre1, $id2, $nombre2);
+
         echo json_encode($Usuarios);
     }
     public static function crear()
@@ -117,7 +119,8 @@ class ControladorUsuarioAdmin
             echo json_encode(["mensaje" => "Error al registrar el usuario."]);
         }
     }
-    public static function editar(){
+    public static function editar()
+    {
 
         $datos = json_decode(file_get_contents("php://input"), true);
         $usuario = new UsuarioAdmin();
@@ -204,11 +207,12 @@ class ControladorUsuarioAdmin
         }
     }
 
-    public static function eliminar() {
+    public static function eliminar()
+    {
 
         $datos = json_decode(file_get_contents("php://input"), true);
 
-        if(!isset($datos['id1'], $datos['nombre1'])) {
+        if (!isset($datos['id1'], $datos['nombre1'])) {
             http_response_code(400);
             echo json_encode(["mensaje" => "Faltan datos requeridos."]);
             return;
@@ -218,13 +222,13 @@ class ControladorUsuarioAdmin
         $nombre2 = $datos['nombre2'] ?? null;
 
         $Cliente = new Cliente();
-        $ResultadoC = $Cliente->eliminar($datos['id1'], $id2,"idCliente", $nombre2);
+        $ResultadoC = $Cliente->eliminar($datos['id1'], $id2, "idCliente", $nombre2);
 
         $Administrador = new Administrador();
-        $ResultadoA = $Administrador->eliminar($datos['id1'], $id2,"idAdministrador", $nombre2);
+        $ResultadoA = $Administrador->eliminar($datos['id1'], $id2, "idAdministrador", $nombre2);
 
         $Usuario = new UsuarioAdmin();
-        $resultado = $Usuario->eliminar($datos['id1'], $id2,$datos['nombre1'], $nombre2);
+        $resultado = $Usuario->eliminar($datos['id1'], $id2, $datos['nombre1'], $nombre2);
 
         if ($resultado && $ResultadoC && $ResultadoA) {
             echo json_encode(["mensaje" => " eliminado"]);
@@ -232,5 +236,23 @@ class ControladorUsuarioAdmin
             http_response_code(500);
             echo json_encode(["mensaje" => "Error al eliminar el Usuario ."]);
         }
+    }
+
+    public static function filtroUsuarioAdmin()
+    {
+        $datos = $_GET;
+
+        $UsuarioAdmin = new UsuarioAdmin();
+
+        $resultados = $UsuarioAdmin->filtrarUsuarios([
+            'idUsuario' => $datos['idUsuario'] ?? null,
+            'nombreUsuario' => $datos['nombreUsuario'] ?? null,
+            'apellidoUsuario' => $datos['apellidoUsuario'] ?? null,
+            'correoUsuario' => $datos['correoUsuario'] ?? null,
+            'celularUsuario' => $datos['celularUsuario'] ?? null,
+            'idRol' => $datos['idRol'] ?? null,
+        ]);
+
+        echo json_encode($resultados);
     }
 }

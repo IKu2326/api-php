@@ -44,4 +44,43 @@ class CalificacionCliente extends ModeloBase
         ]);
     }
 
+    public function filtrarCalificaciones($filtros = [])
+    {
+        $conn = Database::conectar();
+
+        $sql = "SELECT * FROM calificacion WHERE 1=1";
+        $params = [];
+
+        if (!empty($filtros['idCliente'])) {
+            $sql .= " AND idCliente = :idCliente";
+            $params[':idCliente'] = $filtros['idCliente'];
+        }
+
+        if (!empty($filtros['idProducto'])) {
+            $sql .= " AND idProducto = :idProducto";
+            $params[':idProducto'] = $filtros['idProducto'];
+        }
+
+        // Precio mínimo
+        if (!empty($filtros['calificacion_Minima'])) {
+            $sql .= " AND numeroCalificacion >= :precioMin";
+            $params[':precioMin'] = $filtros['calificacion_Minima'];
+        }
+
+        // Precio máximo
+        if (!empty($filtros['calificacion_Maxima'])) {
+            $sql .= " AND numeroCalificacion <= :precioMax";
+            $params[':precioMax'] = $filtros['calificacion_Maxima'];
+        }
+
+        if (!empty($filtros['comentarioCalificacion'])) {
+            $sql .= " AND comentarioCalificacion LIKE :comentarioCalificacion";
+            $params[':comentarioCalificacion'] = '%' . $filtros['comentarioCalificacion'] . '%';
+        }
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

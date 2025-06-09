@@ -5,7 +5,7 @@ class Cliente extends ModeloBase {
         parent::__construct('cliente'); 
     }
 
-        public function obtenerTodosConUsuario()
+    public function obtenerTodosConUsuario()
     {
         $stmt = $this->db->query("SELECT c.*, u.nombreUsuario, u.apellidoUsuario 
         FROM cliente c 

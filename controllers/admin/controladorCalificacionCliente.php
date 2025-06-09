@@ -115,4 +115,21 @@ class controladorCalificacionCliente {
             echo json_encode(["mensaje" => "Error al eliminar la Calificacion."]);
         }
     }
+
+    public static function filtroCalificacion()
+    {
+        $datos = $_GET;
+
+        $Calificacion = new CalificacionCliente();
+
+        $resultados = $Calificacion->filtrarCalificaciones([
+            'idCliente' => $datos['idCliente'] ?? null,
+            'idProducto' => $datos['idProducto'] ?? null,
+            'calificacion_Minima' => $datos['calificacion_Minima'] ?? null,
+            'calificacion_Maxima' => $datos['calificacion_Maxima'] ?? null,
+            'comentarioCalificacion' => $datos['comentarioCalificacion'] ?? null
+        ]);
+
+        echo json_encode($resultados);
+    }
 }
