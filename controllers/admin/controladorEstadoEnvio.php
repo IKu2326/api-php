@@ -1,14 +1,14 @@
 <?php
 
-require_once './models/admin/auxGenero.php';
+require_once './models/admin/estadoEnvio.php';
 
-class controladorAuxiliarGenero {
+class controladorEstadoEnvio {
     
     public static function consultar() {
-        $AuxiliarGenero = new AuxiliarGenero();
-        $AuxiliarGeneros = $AuxiliarGenero->obtenerTodos();
+        $EstadoEnvio = new EstadoEnvio();
+        $EstadoEnvios = $EstadoEnvio->obtenerTodos();
         
-        echo json_encode($AuxiliarGeneros);
+        echo json_encode($EstadoEnvios);
     }
 
     public static function consultar_Id() {
@@ -25,11 +25,10 @@ class controladorAuxiliarGenero {
             return;
         }
 
-        $tipo = "Aux";
-        $AuxiliarGenero = new AuxiliarGenero();
-        $AuxiliarGeneros = $AuxiliarGenero->obtenerPorId($id1, $nombre1,$id2, $nombre2, $tipo);
+        $EstadoEnvio = new EstadoEnvio();
+        $EstadoEnvios = $EstadoEnvio->obtenerPorId($id1, $nombre1);
         
-        echo json_encode($AuxiliarGeneros);
+        echo json_encode($EstadoEnvios);
     }
     public static function eliminar() {
 
@@ -44,14 +43,14 @@ class controladorAuxiliarGenero {
         $id2 = $datos['id2'] ?? null;
         $nombre2 = $datos['nombre2'] ?? null;
 
-        $AuxiliarGenero = new AuxiliarGenero();
-        $resultado = $AuxiliarGenero->eliminar($datos['id1'], $datos['nombre1'],$id2, $nombre2);
+        $EstadoEnvio = new EstadoEnvio();
+        $resultado = $EstadoEnvio->eliminar($datos['id1'], $datos['nombre1'],$id2, $nombre2);
 
         if ($resultado) {
-            echo json_encode(["mensaje" => "AuxiliarGenero eliminado"]);
+            echo json_encode(["mensaje" => "EstadoEnvio eliminado"]);
         } else {
             http_response_code(500);
-            echo json_encode(["mensaje" => "Error al eliminar el AuxiliarGenero."]);
+            echo json_encode(["mensaje" => "Error al eliminar el EstadoEnvio."]);
         }
     }
 }

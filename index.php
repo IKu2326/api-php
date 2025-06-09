@@ -34,6 +34,8 @@ require_once './controllers/admin/controladorAuxPlataforma.php';
 require_once './controllers/admin/controladorAuxGenero.php';
 require_once './controllers/admin/controladorCaracteristicasConsola.php';
 require_once './controllers/admin/controladorSoporte.php';
+require_once './controllers/admin/controladorEstadoEnvio.php';
+require_once './controllers/admin/controladorEnvio.php';
 
 
 $ruta = trim($_GET['ruta'] ?? '');
@@ -333,6 +335,9 @@ switch ($ruta) {
     case 'ConsultarPorID_Soporte':
         controladorSoporteAdmin::consultar_Id();
         break;
+    case 'Consultar_SoporteFiltrados':
+        controladorSoporteAdmin::filtroSoporte();
+        break;
     case 'Editar_Soporte':
         controladorSoporteAdmin::editar();
         break;
@@ -341,6 +346,33 @@ switch ($ruta) {
         break;
     case 'Eliminar_Soporte':
         controladorSoporteAdmin::eliminar();
+        break;
+    case 'Consultar_EstadoEnvio':
+        controladorEstadoEnvio::consultar();
+        break;
+    case 'ConsultarPorID_EstadoEnvio':
+        controladorEstadoEnvio::consultar_Id();
+        break;
+    case 'Eliminar_EstadoEnvio':
+        controladorEstadoEnvio::eliminar();
+        break;
+    case 'Consultar_EnvioAdmin':
+        controladorEnvioAdmin::consultar();
+        break;
+    case 'ConsultarPorID_EnvioAdmin':
+        controladorEnvioAdmin::consultar_Id();
+        break;
+    case 'Consultar_EnvioAdminFiltrados':
+        controladorEnvioAdmin::filtroEnvioAdmin();
+        break;
+    case 'Crear_EnvioAdmin':
+        controladorEnvioAdmin::crear();
+        break;
+    case 'Editar_EnvioAdmin':
+        controladorEnvioAdmin::editar();
+        break;
+    case 'Eliminar_EnvioAdmin':
+        controladorEnvioAdmin::eliminar();
         break;
 
     case 'cotizar-envio':

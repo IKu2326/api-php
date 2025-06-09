@@ -101,4 +101,19 @@ class controladorSoporteAdmin {
             echo json_encode(["mensaje" => "Error al eliminar el Soporte ."]);
         }
     }
+
+    public static function filtroSoporte()
+    {
+        $datos = $_GET;
+
+        $Soporte = new SoporteAdmin();
+
+        $resultados = $Soporte->filtrarSoportes([
+            'idCliente' => $datos['idCliente'] ?? null,
+            'fecha' => $datos['fecha'] ?? null,
+            'Pregunta_Queja_Reclamo' => $datos['Pregunta_Queja_Reclamo'] ?? null,
+        ]);
+
+        echo json_encode($resultados);
+    }
 }

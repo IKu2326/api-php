@@ -64,8 +64,8 @@ class SoporteAdmin extends ModeloBase
             $mail->isSMTP();
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
-            $mail->Username = 'ksmc825@gmail.com'; 
-            $mail->Password = 'fzqadvntrmjucdmz'; 
+            $mail->Username = 'ksmc825@gmail.com';
+            $mail->Password = 'fzqadvntrmjucdmz';
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 
@@ -81,12 +81,39 @@ class SoporteAdmin extends ModeloBase
 
             $mail->send();
 
-            (new SoporteAdmin())->Eliminar($id, "idCliente",$fecha, "fecha");
-            
+            (new SoporteAdmin())->Eliminar($id, "idCliente", $fecha, "fecha");
+
             return true;
         } catch (Exception $e) {
             echo "Error al enviar el correo: {$mail->ErrorInfo}";
         }
+    }
+
+    public function filtrarSoportes($filtros = [])
+    {
+        $conn = Database::conectar();
+
+        $sql = "SELECT * FROM Soporte WHERE 1=1";
+        $params = [];
+
+        if (!empty($filtros['idCliente'])) {
+            $sql .= " AND idCliente = :idCliente";
+            $params[':idCliente'] = $filtros['idCliente'];
+        }
+
+        if (!empty($filtros['fecha'])) {
+            $sql .= " AND fecha = :fecha";
+            $params[':fecha'] = $filtros['fecha'];
+        }
+
+        if (!empty($filtros['Pregunta_Queja_Reclamo'])) {
+            $sql .= " AND pqrs LIKE :pqrs";
+            $params[':pqrs'] = '%' . $filtros['Pregunta_Queja_Reclamo'] . '%';
+        }
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
 }

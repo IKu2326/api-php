@@ -44,7 +44,7 @@ class controladorMarca {
         $nombre2 = $datos['nombre2'] ?? null;
 
         $marca = new Marca();
-        $resultado = $marca->eliminar($datos['id1'], $id2,$datos['nombre1'], $nombre2);
+        $resultado = $marca->eliminar($datos['id1'], $datos['nombre1'],$id2, $nombre2);
 
         if ($resultado) {
             echo json_encode(["mensaje" => "marca eliminado"]);

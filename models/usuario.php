@@ -127,8 +127,6 @@ class Usuario
                 'idRol' => $usuario['idRol'],
             ];
         }
-
-
         return false;
     }
 }

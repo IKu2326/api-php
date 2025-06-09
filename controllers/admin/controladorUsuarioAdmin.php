@@ -222,13 +222,13 @@ class ControladorUsuarioAdmin
         $nombre2 = $datos['nombre2'] ?? null;
 
         $Cliente = new Cliente();
-        $ResultadoC = $Cliente->eliminar($datos['id1'], $id2, "idCliente", $nombre2);
+        $ResultadoC = $Cliente->eliminar($datos['id1'], "idCliente", $id2, $nombre2);
 
         $Administrador = new Administrador();
-        $ResultadoA = $Administrador->eliminar($datos['id1'], $id2, "idAdministrador", $nombre2);
+        $ResultadoA = $Administrador->eliminar($datos['id1'], "idAdministrador", $id2, $nombre2);
 
         $Usuario = new UsuarioAdmin();
-        $resultado = $Usuario->eliminar($datos['id1'], $id2, $datos['nombre1'], $nombre2);
+        $resultado = $Usuario->eliminar($datos['id1'], $datos['nombre1'], $id2, $nombre2);
 
         if ($resultado && $ResultadoC && $ResultadoA) {
             echo json_encode(["mensaje" => " eliminado"]);

@@ -99,7 +99,7 @@ class controladorGenero
         $nombre2 = $datos['nombre2'] ?? null;
 
         $Genero = new Genero();
-        $resultado = $Genero->eliminar($datos['id1'], $id2, $datos['nombre1'], $nombre2);
+        $resultado = $Genero->eliminar($datos['id1'], $datos['nombre1'], $id2, $nombre2);
 
         if ($resultado) {
             echo json_encode(["mensaje" => "Genero eliminado"]);

@@ -106,7 +106,7 @@ class controladorCalificacionCliente {
         $nombre2 = $datos['nombre2'] ?? null;
 
         $FormaPago = new CalificacionCliente();
-        $resultado = $FormaPago->eliminar($datos['id1'], $id2,$datos['nombre1'], $nombre2);
+        $resultado = $FormaPago->eliminar($datos['id1'], $datos['nombre1'],$id2, $nombre2);
 
         if ($resultado) {
             echo json_encode(["mensaje" => "Calificacion eliminad"]);
