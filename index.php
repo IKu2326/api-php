@@ -12,7 +12,6 @@ require_once './controllers/controladorImagenes.php';
 require_once './controllers/ControladorGuardarFactura.php';
 require_once './controllers/controladorSoporte.php';
 require_once './controllers/controladorPerfil.php';
-require_once './controllers/controladorEnvios.php';
 //admin
 require_once './controllers/admin/controladorFormaPago.php';
 require_once './controllers/admin/controladorCalificacionCliente.php';
@@ -375,9 +374,6 @@ switch ($ruta) {
         controladorEnvioAdmin::eliminar();
         break;
 
-    case 'cotizar-envio':
-        EnviosController::cotizar();
-        break;
     default:
         echo json_encode(["mensaje" => "Ruta no encontrada.", "ruta_solicitada" => $ruta]);
         break;
