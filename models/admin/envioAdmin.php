@@ -12,10 +12,10 @@ class EnvioAdmin extends ModeloBase
         $conn = Database::conectar();
         $Envio = new EnvioAdmin();
         $resultado = $Envio->obtenerPorId(id1: $id, nombre1: "fk_pk_Factura");
-        
+
         if ($resultado) {
             return 'duplicado';
-        } 
+        }
 
         $sql = "INSERT INTO envios (fk_pk_Factura, tiempoEstimado, observaciones, idEstadoEnvio) 
         VALUES (:id, :tiempo, :obser, :idE)";
@@ -83,6 +83,31 @@ class EnvioAdmin extends ModeloBase
 
         $stmt = $conn->prepare($sql);
         $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function obtenerDetallesEnvio($idFactura)
+    {
+        $conn = Database::conectar();
+
+        $sql = "SELECT 
+              df.fk_pk_Producto,            
+              p.nombreProducto,             
+              df.cantidadProducto,          
+              df.totalProducto,            
+              f.fechaFactura,              
+              f.idCliente,                 
+              u.nombreUsuario,             
+              u.apellidoUsuario          
+            FROM detalleFactura df
+            JOIN producto p ON df.fk_pk_Producto = p.idProducto
+            JOIN factura f ON df.fk_pk_Factura = f.idFactura
+            JOIN usuario u ON f.idCliente = u.idUsuario
+            WHERE df.fk_pk_Factura = :idFactura";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([':idFactura' => $idFactura]);
+
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
