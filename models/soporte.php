@@ -20,7 +20,6 @@ class Soporte {
             $stmt->execute();
             return ['success' => true];
         } catch (PDOException $e) {
-            // Devuelve el mensaje de error en el JSON
             return ['success' => false, 'error' => $e->getMessage()];
         }
     }
