@@ -28,7 +28,7 @@ class EnviarEmail
 
             // Configuración del mensaje
             $this->mail->setFrom('sebastianrjs03@gmail.com', 'PRUEBA REX');
-            $this->mail->addAddress('garmilena79@gmail.com', 'Destinatario');
+            $this->mail->addAddress('yojanrojaszorro@gmail.com', 'Destinatario');
             $this->mail->isHTML(true);
             $this->mail->Subject = 'PRUEBA DE ENVÍO DE CORREO';
             $this->mail->Body = $cuerpoHtml;
