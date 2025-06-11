@@ -1,6 +1,9 @@
 <?php
 
 require_once './config/database.php';
+require_once(__DIR__ . '/emailFactura.php');
+require_once(__DIR__ . '/facturaPDF.php');
+
 
 class GuardarFactura
 {
@@ -56,6 +59,29 @@ class GuardarFactura
                     ":cantidad" => $prod['cantidad'],
                     ":productoId" => $prod['id']
                 ]);
+
+                $nombreArchivo = "factura_{$facturaId}.pdf";
+                $rutaArchivo = __DIR__ . '/../assets/Facturas/' . $nombreArchivo;
+
+                $pdf = new CrearPdf();
+                $pdf->generarPdf($rutaArchivo);
+
+
+
+                
+                $enviarEmail = new EnviarEmail();
+
+
+                $cuerpoCorreo = "
+                <h2>Gracias por tu compra</h2>
+                <p><strong>Factura N°:</strong> {$facturaId}</p>
+                <p><strong>Fecha:</strong> {$fecha}</p>
+                <p><strong>Subtotal:</strong> {$subtotal}</p>
+                <p><strong>Total:</strong> {$total}</p>
+                <h3>Detalle:</h3>
+                ";
+
+                $enviarEmail->enviarCorreo($cuerpoCorreo, $rutaArchivo);
             }
 
             return $facturaId;
@@ -63,6 +89,4 @@ class GuardarFactura
             return " Error: " . $e->getMessage();
         }
     }
-
 }
-
