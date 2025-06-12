@@ -23,7 +23,7 @@ class DetallesProducto{
              p.nombreProducto,
              p.descuentoProducto,
              p.totalProducto,
-             j.anoLanzamineto,
+             j.anoLanzamiento,
              j.descripcionJuego,
              GROUP_CONCAT(DISTINCT aug.fk_pk_genero SEPARATOR ', ') AS aux_genero,
              GROUP_CONCAT(DISTINCT apl.idPlataforma SEPARATOR ', ') AS aux_plataforma
@@ -38,7 +38,7 @@ class DetallesProducto{
              p.nombreProducto,
              p.descuentoProducto,
              p.totalProducto,
-             j.anoLanzamineto,
+             j.anoLanzamiento,
              j.descripcionJuego;
  
             ";
