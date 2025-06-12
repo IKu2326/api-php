@@ -3,10 +3,10 @@
 require_once './models/admin/Producto.php';
 class Imagenes
 {
-    public static function consultar($nombreCategoria, $carpeta)
+    public static function consultar($nombreCategoria, $car)
     {
-        $carpeta = realpath(__DIR__ . '/../assets/' . $carpeta . '/' . $nombreCategoria . '/');
-        $urlBase = 'http://localhost/api-php/assets/' . $carpeta . '/' . $nombreCategoria . '/';
+        $carpeta = realpath(__DIR__ . '/../assets/' . $car . '/' . $nombreCategoria . '/');
+        $urlBase = 'http://localhost:8081/api-php/assets/' . $car . '/' . $nombreCategoria . '/';
         $extensiones = ['jpg', 'jpeg', 'png', 'webp', 'jfif', 'avif'];
 
         $imagenes = [];
@@ -26,7 +26,7 @@ class Imagenes
     public static function consultarPorId($categoria, $car, $id)
     {
         $carpeta = realpath(__DIR__ . '/../assets/' . $car . '/' . $categoria . '/');
-        $urlBase = 'c:\\xampp\\htdocs\\api-php\\assets/' . $car . '/' . $categoria . '/';
+        $urlBase = 'http://localhost:8081/api-php/assets/' . $car . '/' . $categoria . '/';
 
         $visualesResult = [];
         $extensiones = ['jpg', 'jpeg', 'png', 'webp', 'jfif', 'avif'];
