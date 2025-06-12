@@ -1,17 +1,19 @@
 <?php
 
-
+require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../vendor/autoload.php';
 
 
 class CrearPdf
 {
 
+    private $conn;
     private $pdf;
     public $logoPath;
 
     public function __construct()
     {
+        $this->conn = Database::conectar();
         $this->pdf = new FPDF();
         $this->logoPath = __DIR__ . '/../assets/logoNVS.png';
     }
@@ -32,6 +34,24 @@ class CrearPdf
             ];
         } else {
 
+            $sqlFactura = "SELECT 
+             p.nombreProducto,
+             p.idTipoProducto,
+             df.cantidadProducto,
+             p.precioProducto,
+             p.descuentoProducto,
+             p.totalProducto,
+             df.totalProducto AS totalDetalle
+            FROM producto p
+            JOIN detallefactura df ON p.idProducto = df.fk_pk_Producto
+            WHERE df.fk_pk_Factura = :idFactura;
+        ";
+            $stmt = $this->conn->prepare($sqlFactura);
+            $stmt->bindParam(':idFactura', $datos['facturaId'], PDO::PARAM_INT);
+            $stmt->execute();
+
+            $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
             $this->pdf->AddPage();
 
             $this->pdf->Image($this->logoPath, 10, 10, 30);
@@ -39,7 +59,7 @@ class CrearPdf
             $this->pdf->Cell(0, 10, $this->txt('New Vision Store NVS'), 0, 1, 'C');
 
             $this->pdf->SetFont('Arial', '', 12);
-            $this->pdf->Cell(0, 10, $this->txt("Factura No: {$datos['facturaId']} - Fecha: {$datos['fecha'] }"), 0, 1, 'C');
+            $this->pdf->Cell(0, 10, $this->txt("Factura No: {$datos['facturaId']} - Fecha: {$datos['fecha']}"), 0, 1, 'C');
 
             // Datos del cliente
             $this->pdf->Ln(5);
@@ -58,7 +78,7 @@ class CrearPdf
             // -------------------- CUERPO COLUMNA IZQUIERDA --------------------
             $this->pdf->SetFont('Arial', '', 11);
             $this->pdf->SetXY($x, $y + 8); // Baja después del título
-            $this->pdf->MultiCell(90, 6, $this->txt("ID Cliente: 123\nNombre: Carlos Ramírez\nCorreo: carlos@email.com | Teléfono: 3112345678\nDirección: Calle maple 123"), 0, 'L');
+            $this->pdf->MultiCell(90, 6, $this->txt("ID Cliente: {$datos['clienteId']}\nNombre: Carlos Ramírez\nCorreo: carlos@email.com | Teléfono: 3112345678\nDirección: Calle maple 123"), 0, 'L');
 
             // -------------------- CUERPO COLUMNA DERECHA --------------------
             $this->pdf->SetXY($x + 100, $y + 8);
@@ -82,26 +102,17 @@ class CrearPdf
 
             $this->pdf->SetFont('Arial', '', 10);
 
-            // Producto 1
-            $this->pdf->Cell(45, 8, $this->txt('The Legend of Zelda'), 1);
-            $this->pdf->Cell(30, 8, $this->txt('Videojuego'), 1);
-            $this->pdf->Cell(10, 8, '1', 1);
-            $this->pdf->Cell(30, 8, '$180.000', 1);
-            $this->pdf->Cell(20, 8, '10%', 1);
-            $this->pdf->Cell(30, 8, '$162.000', 1);
-            $this->pdf->Cell(25, 8, '$162.000', 1);
-            $this->pdf->Ln();
+            foreach ($productos as $producto) { 
 
-            // Producto 2
-            $this->pdf->Cell(45, 8, $this->txt('PlayStation 5'), 1);
-            $this->pdf->Cell(30, 8, $this->txt('Consola'), 1);
-            $this->pdf->Cell(10, 8, '1', 1);
-            $this->pdf->Cell(30, 8, '$2.400.000', 1);
-            $this->pdf->Cell(20, 8, '30%', 1);
-            $this->pdf->Cell(30, 8, '$1.680.000', 1);
-            $this->pdf->Cell(25, 8, '$1.680.000', 1);
-            $this->pdf->Ln();
-
+                $this->pdf->Cell(45, 8, $this->txt($producto['nombreProducto']), 1);
+                $this->pdf->Cell(30, 8, $this->txt($producto['idTipoProducto']), 1);
+                $this->pdf->Cell(10, 8, $producto['cantidadProducto'], 1);
+                $this->pdf->Cell(30, 8, '$' . number_format($producto['precioProducto'], 0, ',', '.'), 1);
+                $this->pdf->Cell(20, 8, $producto['descuentoProducto'] . '%', 1);
+                $this->pdf->Cell(30, 8, '$' . number_format($producto['totalProducto'], 0, ',', '.'), 1);
+                $this->pdf->Cell(25, 8, '$' . number_format($producto['totalDetalle'], 0, ',', '.'), 1);
+                $this->pdf->Ln();
+            }
             // Totales
             $this->pdf->Ln(5);
             $this->pdf->SetFont('Arial', '', 11);
