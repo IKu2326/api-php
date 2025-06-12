@@ -22,21 +22,22 @@ class Producto extends ModeloBase
         try {
             $conn = Database::conectar();
 
-            $sql = "INSERT INTO Producto (
-        nombreProducto, precioProducto, garantiaProducto, idTipoProducto,
-        idAdministrador_crear, stock, cantidad
-    ) VALUES (
-        :nombre, :precio, :garantia, :tipo, :administrador, :stock, :cantidad
-    )";
+           $sql = "INSERT INTO Producto (
+    nombreProducto, precioProducto, descuentoProducto, totalProducto, garantiaProducto, idTipoProducto,
+    idAdministrador_crear, stock
+) VALUES (
+    :nombre, :precio, :descuento, :total, :garantia, :tipo, :administrador, :stock
+)";
             $stmt = $conn->prepare($sql);
             $exito = $stmt->execute([
                 ':nombre' => $datos['nombreProducto'],
                 ':precio' => $datos['precioProducto'],
+                ':descuento' => $datos['descuentoProducto'],
+                ':total' => $datos['totalProducto'],
                 ':garantia' => $datos['garantiaProducto'],
                 ':tipo' => $datos['idTipoProducto'],
                 ':administrador' => $datos['idAdmin'],
                 ':stock' => $datos['stock'],
-                ':cantidad' => $datos['cantidad'],
             ]);
 
             $ultimo_id = $conn->lastInsertId();
@@ -80,8 +81,10 @@ class Producto extends ModeloBase
 
         $conn = Database::conectar();
 
-        $sql = "UPDATE Producto SET nombreProducto = :nombre, precioProducto = :precio, garantiaProducto = :garantia,
-         idTipoProducto = :tipo, idAdministrador_crear = :administrador, stock = :stock, cantidad = :cantidad 
+        $sql = "UPDATE Producto SET nombreProducto = :nombre, precioProducto = :precio, descuentoProducto = :descuento,
+         totalProducto = :total garantiaProducto = :garantia, idTipoProducto = :tipo,
+         idAdministrador_crear = :administrador, stock = :stock, ventaProducto = :venta, 
+
             WHERE idProducto = :id1";
         $stmt = $conn->prepare($sql);
 
@@ -89,11 +92,13 @@ class Producto extends ModeloBase
             ':id1' => $datos['idProducto'],
             ':nombre' => $datos['nombreProducto'],
             ':precio' => $datos['precioProducto'],
+            ':descuento' => $datos['descuentoProducto'],
+            ':total' => $datos['totalProducto'],
             ':garantia' => $datos['garantiaProducto'],
             ':tipo' => $datos['idTipoProducto'],
             ':administrador' => $datos['idAdmin'],
             ':stock' => $datos['stock'],
-            ':cantidad' => $datos['cantidad'],
+            ':venta' => $datos['ventaproducto'],
         ]);
 
         if ($exito) {
@@ -158,13 +163,13 @@ class Producto extends ModeloBase
 
         // Precio mínimo
         if (!empty($filtros['precioMin'])) {
-            $sql .= " AND precioProducto >= :precioMin";
+            $sql .= " AND totalProducto >= :precioMin";
             $params[':precioMin'] = $filtros['precioMin'];
         }
 
         // Precio máximo
         if (!empty($filtros['precioMax'])) {
-            $sql .= " AND precioProducto <= :precioMax";
+            $sql .= " AND totalProducto <= :precioMax";
             $params[':precioMax'] = $filtros['precioMax'];
         }
 
@@ -180,11 +185,44 @@ class Producto extends ModeloBase
             $params[':adminId'] = $filtros['adminId'];
         }
 
-        // Stock
-        if (!empty($filtros['stock'])) {
-            $stock = ($filtros['stock'] === "Activo") ? 1 : 0;
-            $sql .= " AND stock = :stock";
-            $params[':stock'] = $stock;
+        // Disponibles
+        if (!empty($filtros['disponibles'])) {
+            $rango = $filtros['disponibles'];
+
+            $rangoLimpio = trim(str_replace('unidades', '', $rango));
+
+            if (strpos($rangoLimpio, '+') !== false) {
+                $min = (int) filter_var($rangoLimpio, FILTER_SANITIZE_NUMBER_INT);
+                $sql .= " AND stock >= :stockMin";
+                $params[':stockMin'] = $min;
+            }
+            elseif (preg_match('/^(\d+)\s*a\s*(\d+)$/', $rangoLimpio, $matches)) {
+                $min = (int) $matches[1];
+                $max = (int) $matches[2];
+                $sql .= " AND stock BETWEEN :stockMin AND :stockMax";
+                $params[':stockMin'] = $min;
+                $params[':stockMax'] = $max;
+            }
+        }
+        
+        // Disponibles
+        if (!empty($filtros['vendidas'])) {
+            $rango = $filtros['vendidas'];
+
+            $rangoLimpio = trim(str_replace('unidades', '', $rango));
+
+            if (strpos($rangoLimpio, '+') !== false) {
+                $min = (int) filter_var($rangoLimpio, FILTER_SANITIZE_NUMBER_INT);
+                $sql .= " AND ventaProducto >= :stockMin";
+                $params[':stockMin'] = $min;
+            }
+            elseif (preg_match('/^(\d+)\s*a\s*(\d+)$/', $rangoLimpio, $matches)) {
+                $min = (int) $matches[1];
+                $max = (int) $matches[2];
+                $sql .= " AND ventaProducto BETWEEN :stockMin AND :stockMax";
+                $params[':stockMin'] = $min;
+                $params[':stockMax'] = $max;
+            }
         }
 
         $stmt = $conn->prepare($sql);
