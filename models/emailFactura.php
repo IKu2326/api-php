@@ -27,10 +27,10 @@ class EnviarEmail
             $this->mail->Port = 587;
 
             // Configuración del mensaje
-            $this->mail->setFrom('sebastianrjs03@gmail.com', 'PRUEBA REX');
+            $this->mail->setFrom('sebastianrjs03@gmail.com', 'NVS New Vision Store');
             $this->mail->addAddress('yojanrojaszorro@gmail.com', 'Destinatario');
             $this->mail->isHTML(true);
-            $this->mail->Subject = 'PRUEBA DE ENVÍO DE CORREO';
+            $this->mail->Subject = 'Factura de Compra - New Vision Store NVS';
             $this->mail->Body = $cuerpoHtml;
 
               
